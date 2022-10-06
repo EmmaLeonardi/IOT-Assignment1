@@ -1,14 +1,12 @@
+#include<Pins.h>
+#include<Constants.h>
+#include<Patterns.h>
 
-#define LS 12
-#define NLed 4
-#define Pot 1
-//Analog 1
+//int BPins[N];
+//int LPins[N];
 
-int LPins[NLed]={11,10,9,8};
-int statusL[NLed]={0,0,0,0};
+boolean statusL[N]={false,false,false,false};
 //0->spenti, 1->accesi
-
-int BPins[NLed]={7,6,5,4};
 
 int status;
 /* 
@@ -19,13 +17,11 @@ int status;
 4->game over
 */
 
-#define POTMIN 0
-#define POTMAX 1023
-#define LVMIN 1
-#define LVMAX 4
+
+
 
 void setup(){
-    for(int i=0;i++;i<NLed){
+    for(int i=0;i++;i<N){
     pinMode(LPins[i],OUTPUT);
     pinMode(BPins[i],INPUT);
     }
