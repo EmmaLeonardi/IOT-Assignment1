@@ -14,7 +14,7 @@
 //The max value of the potentiomenter
 #define POTMAX 1023
 
-extern const int* BPins[N];
-extern const int* LPins[N];
+extern const int* BPins;
+extern const int* LPins;
 
 #endif
