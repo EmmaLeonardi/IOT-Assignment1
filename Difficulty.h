@@ -1,6 +1,11 @@
-
+//The minimum time to wait for the pattern to appear
 #define RANDOMWAITMIN 2
+
+//The maximum time to wait for the pattern to appear
 #define RANDOMWAITMAX 5
+
+//The maximum number of penalty before game over
+#define PENALTYMAX 3
 
 /*Returns the start time for the difficulty level selected.
 The level has to be between 1 (easiest) and LV (hardest, defined in constants), otherwise returns -1*/
