@@ -9,4 +9,7 @@
 // The hardest difficulty
 #define LVMAX 4
 
+// The number of levels in the difficulty
+#define LV 4
+
 #endif
