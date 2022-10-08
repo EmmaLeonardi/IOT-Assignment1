@@ -2,13 +2,12 @@
 #include <Constants.h>
 #include <Patterns.h>
 
-// int BPins[N];
-// int LPins[N];
-
-boolean statusL[N] = {false, false, false, false};
+boolean statusL[N];
 // 0->spenti, 1->accesi
 
 int status;
+int lv=0;
+
 /*
 0->il gioco è nel menù iniziale, decidi difficoltà
 1->sto generando il pattern dei led
@@ -23,12 +22,14 @@ void setup()
     {
         pinMode(LPins[i], OUTPUT);
         pinMode(BPins[i], INPUT);
+        statusL[i]=false;
     }
     pinMode(Pot, INPUT);
     pinMode(LS, OUTPUT);
     status = 0;
     Serial.begin(9600);
     srand(analogRead(AnalogFree));
+    Serial.flush();
 }
 
 void loop()
@@ -36,33 +37,39 @@ void loop()
     switch (status)
     {
     case (0):
-        Serial.flush();
         Serial.println("“Welcome to the Catch the Led Pattern Game. Press Key T1 to Start.");
         // 0->1023
         int pValue = analogRead(Pot);
-        int lv = map(pValue, POTMIN, POTMAX, LVMIN, LVMAX);
+        lv = map(pValue, POTMIN, POTMAX, LVMIN, LVMAX);
         // Cambio la difficoltà e lo stampo
-        switch (lv)
-        {
-        case (1):
-            break;
-        case (2):
-            break;
-        case (3):
-            break;
-        case (4):
-            break;
-        default:
-        }
-
+        Serial.print("Difficoltà impostata a: ");
+        Serial.println(lv);
+        //Se premi il pulsante->1
+        //Se non premi pulsante sleep
+        //Led rosso varie
+        //Go!
         break;
     case (1):
+        //Resetto punteggio
+        //Genero pattern
+        //Accendo led
+        //Aspetto tempo casuale t1 acceso
+        //Spengo per tempo casuel t2
         break;
     case (2):
+        //Leggo gli interrupt, accendo led corrispondenti
+        //Quando hai il pattern corretto->3
+        //Timeout->aumento penalià
+        //Se penalità >max allowed (game over)->4
+        //Altrimenti vai in 1 (dopo print penalità)
         break;
     case (3):
+        //Aumento punteggio, stampo punteggio
+        //Torno a 1
         break;
     case (4):
+        //Stampa game over, punteggio, difficoltà
+        //Ritorna dopo tot in 1
         break;
     default:
         //??
