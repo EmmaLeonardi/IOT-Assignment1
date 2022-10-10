@@ -5,10 +5,10 @@
 #define FADE_AMOUNT 10;
 
 // The minumum brightness a led can take
-#define FADE_LIMIT_MIN 0;
+#define FADE_LIMIT_MIN 0
 
 // The maximum brightness a led can take
-#define FADE_LIMIT_MAX 255;
+#define FADE_LIMIT_MAX 255
 
 /*Returns the brightness of the led at the next step, which is between the limits*/
 int nextStep(int current);
