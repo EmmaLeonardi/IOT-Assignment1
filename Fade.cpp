@@ -1,11 +1,11 @@
-#include <Fade.h>
+#include "Fade.h"
 
-int fadeAmount = FADE_AMOUNT;
+static int fadeAmount = FADE_AMOUNT;
 
 /*Returns the brightness of the led at the next step, which is between the limits*/
 int nextStep(int current)
 {
-    current += FADE_AMOUNT;
+    current += fadeAmount;
     if (current == FADE_LIMIT_MIN || current == FADE_LIMIT_MAX)
     {
         fadeAmount = -fadeAmount;
