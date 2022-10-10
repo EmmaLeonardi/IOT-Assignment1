@@ -1,9 +1,9 @@
-#include <Pins.h>
-#include <Constants.h>
-#include <Patterns.h>
-#include <Fade.h>
+#include "Pins.h"
+#include "Constants.h"
+#include "Patterns.h"
+#include "Fade.h"
 
-boolean statusL[N];
+bool statusL[N];
 // 0->spenti, 1->accesi
 
 int status;
