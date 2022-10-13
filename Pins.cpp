@@ -1,5 +1,5 @@
 #include "Pins.h"
 
-const int BPins[N] = {7, 6, 5, 4};
-const int LPins[N] = {11, 10, 9, 8};
+int BPins[N] = {7, 6, 5, 4};
+int LPins[N] = {11, 10, 9, 8};
 bool LStatus[N]={false,false,false,false};
