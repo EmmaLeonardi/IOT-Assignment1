@@ -5,6 +5,7 @@
 #include "Difficulty.h"
 #include "Score.h"
 #include "Interrupts.h"
+#include "Status.h"
 #include <TimerOne.h>
 #include <EnableInterrupt.h>
 
@@ -16,6 +17,8 @@ int lv = 0;
 bool hasPrinted = false;
 int brightness = 0;
 int score = 0;
+bool pattern[N];
+int time=0;
 
 /*
 0->il gioco è nel menù iniziale, decidi difficoltà
@@ -64,14 +67,15 @@ void loop()
                 lv = tmp;
                 Serial.print("Difficulty set to: ");
                 Serial.println(lv);
+                time=getStartTime(lv);
             }
             // Ls pulses
             brightness = nextStep(brightness);
             setBrightness(brightness, LS);
             if (getGameStatus() == -1)
             {
-                // Deep sleep triggered
-                // Attach interrupt to all buttons to wakeup Arduino
+                //TODO: Deep sleep triggered
+                //TODO: Attach interrupt to all buttons to wakeup Arduino
                 // Remove timer1 handler
                 Timer1.detachInterrupt();
                 // Removed interrupt handler
@@ -103,19 +107,25 @@ void loop()
         break;
     case (1):;
         {
-            // Spengo led per t1 tempo casuale
-            // Genero pattern
-            // Accendo led
-            // Aspetto tempo casuale t2 acceso
-            // Spengo tutto
+            //Waiting a t1 random time
+            sleep(randomWaitTime());
+            //Generate pattern
+            generatePattern(pattern,N);
+            //Turn on led
+            setPattern(pattern,LPins,N);
+            setStatusAsGiven(pattern,statusL,N);
+            //Wait
+            sleep(time);
+            //Turn off all leds
+            turnAllOff(LPins,statusL,N);
+            status=2;
         }
         break;
     case (2):;
         {
             // Ho t3 tempo per indovinare
             // Leggo gli interrupt, accendo led corrispondenti
-            // Quando hai il pattern corretto->3
-            // Timeout->aumento penalià
+            // Timeout->aumento penalià o pattern corretto
             // Se penalità >max allowed (game over)->4
             // Altrimenti vai in 1 (dopo print penalità)
         }
