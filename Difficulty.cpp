@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "Difficulty.h"
 #include "Constants.h"
 

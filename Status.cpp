@@ -1,4 +1,5 @@
 #include "Status.h"
+#include "Arduino.h"
 
 /*Turns off all the leds in the led array, and sets the status accordingly*/
 void turnAllOff(int *ledArray, bool *status, int SIZE)
