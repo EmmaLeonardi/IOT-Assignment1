@@ -24,4 +24,7 @@ int getMemorizeTime(int lv);
 /*Returns the time for the next memorize, given the previous one */
 int nextMemorizeTime(int previousTime);
 
+/*Returns the time for a random wait beween MIN and MAX */
+int randomWaitTime();
+
 #endif

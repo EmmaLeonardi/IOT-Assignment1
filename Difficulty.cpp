@@ -80,3 +80,9 @@ int nextMemorizeTime(int previousTime)
 {
     return previousTime * NextMemorizeSpeedup;
 }
+
+/*Returns the time for a random wait between MIN and MAX */
+int randomWaitTime()
+{
+    return rand() % (RANDOMWAITMAX - RANDOMWAITMIN) + RANDOMWAITMIN;
+}
