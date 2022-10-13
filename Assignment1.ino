@@ -108,14 +108,14 @@ void loop()
     case (1):;
         {
             //Waiting a t1 random time
-            sleep(randomWaitTime());
+            delay(randomWaitTime());
             //Generate pattern
             generatePattern(pattern,N);
             //Turn on led
             setPattern(pattern,LPins,N);
             setStatusAsGiven(pattern,statusL,N);
             //Wait
-            sleep(time);
+            delay(time);
             //Turn off all leds
             turnAllOff(LPins,statusL,N);
             status=2;
