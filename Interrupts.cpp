@@ -30,3 +30,16 @@ int getGameStatus(){
 void deepSleepEvent(){
     gameStarts=-1;
 }
+
+void timeHasEnded(){
+    endTime=1;
+}
+
+int getEndTime(){
+    return endTime;
+}
+
+/*Function to reset the endTime*/
+void resetEndTime(){
+    endTime=0;
+}
