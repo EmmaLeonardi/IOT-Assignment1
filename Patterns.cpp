@@ -1,4 +1,5 @@
 #include "Patterns.h"
+#include "Arduino.h"
 
 /* This method uses a pseudorandom generator to create a pattern on the given array a.
  */
