@@ -18,7 +18,8 @@ bool hasPrinted = false;
 int brightness = 0;
 int score = 0;
 bool pattern[N];
-int time=0;
+int timeShow = 0;
+int timeGuess = 0;
 
 /*
 0->il gioco è nel menù iniziale, decidi difficoltà
@@ -67,16 +68,17 @@ void loop()
                 lv = tmp;
                 Serial.print("Difficulty set to: ");
                 Serial.println(lv);
-                time=getStartTime(lv);
+                timeShow = getStartTime(lv);
+                timeGuess = getMemorizeTime(lv);
             }
             // Ls pulses
             brightness = nextStep(brightness);
             setBrightness(brightness, LS);
             if (getGameStatus() == -1)
             {
-                //TODO: Deep sleep triggered
-                //TODO: Attach interrupt to all buttons to wakeup Arduino
-                // Remove timer1 handler
+                // TODO: Deep sleep triggered
+                // TODO: Attach interrupt to all buttons to wakeup Arduino
+                //  Remove timer1 handler
                 Timer1.detachInterrupt();
                 // Removed interrupt handler
                 disableInterrupt(BPins[0]);
@@ -98,6 +100,7 @@ void loop()
                 status = 1;
                 hasPrinted = false;
                 resetGame();
+                turnAllOff(LPins, LStatus, N);
             }
             else
             {
@@ -107,27 +110,58 @@ void loop()
         break;
     case (1):;
         {
-            //Waiting a t1 random time
+            // Waiting a t1 random Show
+
             delay(randomWaitTime());
-            //Generate pattern
-            generatePattern(pattern,N);
-            //Turn on led
-            setPattern(pattern,LPins,N);
-            setStatusAsGiven(pattern,statusL,N);
-            //Wait
-            delay(time);
-            //Turn off all leds
-            turnAllOff(LPins,statusL,N);
-            status=2;
+            // Generate pattern
+            generatePattern(pattern, N);
+            // Turn on led
+            setPattern(pattern, LPins, N);
+            setStatusAsGiven(pattern, statusL, N);
+            // Wait
+            delay(timeShow);
+            // Turn off all leds
+            turnAllOff(LPins, statusL, N);
+            status = 2;
         }
         break;
     case (2):;
         {
-            // Ho t3 tempo per indovinare
-            // Leggo gli interrupt, accendo led corrispondenti
-            // Timeout->aumento penalià o pattern corretto
-            // Se penalità >max allowed (game over)->4
-            // Altrimenti vai in 1 (dopo print penalità)
+            if (hasPrinted == false)
+            {
+                // I have t3 time to guess
+                hasPrinted = true;
+                Timer1.initialize(timeGuess * USECTOSEC);
+                Timer1.attachInterrupt(timeHasEnded);
+                // Connect all buttons with the interrupts to all the leds
+                // Keep status updated
+            }
+            if (getEndTime() == 1)
+            {
+                // The time has ended
+                Timer1.detachInterrupt();
+                // Remove all button interrupts 
+                bool guess = comparePattern(pattern, LStatus, N);
+                if (guess)
+                {
+                    // Guessed rigth!
+                    status = 3;
+                }
+                else
+                {
+                    Serial.println("Penality!");
+                    if (addPenality() == false)
+                    {
+                        // Game over
+                        status = 4;
+                    }
+                    else
+                    {
+                        // Guessed wrong, try again
+                        status = 2;
+                    }
+                }
+            }
         }
         break;
     case (3):;
