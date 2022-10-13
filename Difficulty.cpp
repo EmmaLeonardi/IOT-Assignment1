@@ -76,7 +76,7 @@ int getMemorizeTime(int lv)
 }
 
 /*Returns the time for the next memorize, given the previous one */
-int nextLevelTime(int previousTime)
+int nextMemorizeTime(int previousTime)
 {
     return previousTime * NextMemorizeSpeedup;
 }

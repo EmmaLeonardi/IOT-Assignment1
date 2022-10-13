@@ -22,6 +22,6 @@ The level has to be between 1 (easiest) and LV (hardest, defined in constants), 
 int getMemorizeTime(int lv);
 
 /*Returns the time for the next memorize, given the previous one */
-int nextLevelTime(int previousTime);
+int nextMemorizeTime(int previousTime);
 
 #endif
