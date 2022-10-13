@@ -12,7 +12,10 @@
 // The number of levels in the difficulty
 #define LV 4
 
-//The number of seconds max to wait before going into deep sleep mode
+// The number of seconds max to wait before going into deep sleep mode
 #define WAITFORSTART 10
+
+// The conversion from sec to usec 1000000 usec = 1 sec
+#define USECTOSEC 1000000
 
 #endif
