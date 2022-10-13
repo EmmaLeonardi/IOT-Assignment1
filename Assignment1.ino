@@ -2,6 +2,11 @@
 #include "Constants.h"
 #include "Patterns.h"
 #include "Fade.h"
+#include "Difficulty.h"
+#include "Score.h"
+#include "Interrupts.h"
+#include <TimerOne.h>
+#include <EnableInterrupt.h>
 
 bool statusL[N];
 // 0->spenti, 1->accesi
@@ -10,7 +15,7 @@ int status;
 int lv = 0;
 bool hasPrinted = false;
 int brightness = 0;
-int score=0;
+int score = 0;
 
 /*
 0->il gioco è nel menù iniziale, decidi difficoltà
@@ -40,59 +45,98 @@ void loop()
 {
     switch (status)
     {
-    case (0):
-        if (hasPrinted == false)
+    case (0):;
         {
-            Serial.println("Welcome to the Catch the Led Pattern Game. Press Key T1 to Start.");
-            hasPrinted = true;
+            if (hasPrinted == false)
+            {
+                Serial.println("Welcome to the Catch the Led Pattern Game. Press Key T1 to Start.");
+                hasPrinted = true;
+                // Turn on interrupts for B1
+                enableInterrupt(BPins[0], startGame, CHANGE);
+                Timer1.initialize(WAITFORSTART * USECTOSEC);
+                Timer1.attachInterrupt(deepSleepEvent);
+            }
+            int pValue = analogRead(Pot);
+            int tmp = map(pValue, POTMIN, POTMAX, LVMIN, LVMAX);
+            if (tmp != lv)
+            {
+                // The difficulty has changed
+                lv = tmp;
+                Serial.print("Difficulty set to: ");
+                Serial.println(lv);
+            }
             // Ls pulses
+            brightness = nextStep(brightness);
+            setBrightness(brightness, LS);
+            if (getGameStatus() == -1)
+            {
+                // Deep sleep triggered
+                // Attach interrupt to all buttons to wakeup Arduino
+                // Remove timer1 handler
+                Timer1.detachInterrupt();
+                // Removed interrupt handler
+                disableInterrupt(BPins[0]);
+                // Reset game status
+                resetGame();
+                // Reset status
+                status = 0;
+            }
+            else if (getGameStatus() == 1)
+            {
+                // Remove timer1 handler
+                Timer1.detachInterrupt();
+                // Removed interrupt handler
+                disableInterrupt(BPins[0]);
+                Serial.println("Go!");
+                brightness = FADE_LIMIT_MIN;
+                setBrightness(brightness, LS);
+                score = 0;
+                status = 1;
+                hasPrinted = false;
+                resetGame();
+            }
+            else
+            {
+                // Still waiting for button press or timer event
+            }
         }
-        int pValue = analogRead(Pot);
-        int tmp = map(pValue, POTMIN, POTMAX, LVMIN, LVMAX);
-        if (tmp != lv)
+        break;
+    case (1):;
         {
-            // The difficulty has changed
-            lv = tmp;
-            Serial.print("Difficulty set to: ");
-            Serial.println(lv);
+            // Spengo led per t1 tempo casuale
+            // Genero pattern
+            // Accendo led
+            // Aspetto tempo casuale t2 acceso
+            // Spengo tutto
         }
-        brightness = nextStep(brightness);
-        setBrightness(brightness, LS);
-        // Interrupt handler per T1
-        // Se premi il pulsante->1
-        // Se non premi pulsante sleep
-        Serial.println("Go!");
-        //
-        brightness=FADE_LIMIT_MIN;
-        setBrightness(brightness,LS);
-        score=0;
-        status=1;
-        hasPrinted = false;
         break;
-    case (1):
-        // Spengo led per t1 tempo casuale
-        // Genero pattern
-        // Accendo led
-        // Aspetto tempo casuale t2 acceso
-        // Spengo tutto
+    case (2):;
+        {
+            // Ho t3 tempo per indovinare
+            // Leggo gli interrupt, accendo led corrispondenti
+            // Quando hai il pattern corretto->3
+            // Timeout->aumento penalià
+            // Se penalità >max allowed (game over)->4
+            // Altrimenti vai in 1 (dopo print penalità)
+        }
         break;
-    case (2):
-        // Ho t3 tempo per indovinare
-        // Leggo gli interrupt, accendo led corrispondenti
-        // Quando hai il pattern corretto->3
-        // Timeout->aumento penalià
-        // Se penalità >max allowed (game over)->4
-        // Altrimenti vai in 1 (dopo print penalità)
+    case (3):;
+        {
+            // Aumento punteggio, stampo punteggio
+            // Torno a 1
+        }
         break;
-    case (3):
-        // Aumento punteggio, stampo punteggio
-        // Torno a 1
-        break;
-    case (4):
-        // Stampa game over, punteggio, difficoltà
-        // Ritorna dopo tot in 1
+    case (4):;
+        {
+            // Stampa game over, punteggio, difficoltà
+            // Ritorna dopo tot in 1
+            // resetta game started
+        }
         break;
     default:
         //??
-    }
+        ;
+        {
+        }
+    };
 }
