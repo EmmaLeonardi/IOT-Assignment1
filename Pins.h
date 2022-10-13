@@ -19,5 +19,6 @@
 
 extern const int BPins[N];
 extern const int LPins[N];
+extern bool LStatus[N];
 
 #endif
