@@ -20,6 +20,9 @@
 // Defines the percentage speedup of each consecutive level
 #define NextMemorizeSpeedup 0.95
 
+// The number of penalities
+static int penalityN=0;
+
 /*Returns the start time for the difficulty level selected.
 The level has to be between 1 (easiest) and LV (hardest, defined in constants), otherwise returns -1*/
 int getStartTime(int lv)
@@ -86,4 +89,15 @@ int nextMemorizeTime(int previousTime)
 int randomWaitTime()
 {
     return rand() % (RANDOMWAITMAX - RANDOMWAITMIN) + RANDOMWAITMIN;
+}
+
+/*Adds a penality, returns true if the number is less than PENALITY MAX, otherwise false*/
+bool addPenality(){
+    penalityN++;
+    return penalityN==PENALTYMAX;
+}
+
+/*Resets the number of penalities*/
+void resetPenality(){
+    penalityN=0;
 }

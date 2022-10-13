@@ -27,4 +27,10 @@ int nextMemorizeTime(int previousTime);
 /*Returns the time for a random wait between MIN and MAX */
 int randomWaitTime();
 
+/*Adds a penality, returns true if the number is less than PENALITY MAX, otherwise false*/
+bool addPenality();
+
+/*Resets the number of penalities*/
+void resetPenality();
+
 #endif
