@@ -1,4 +1,5 @@
 #include "Fade.h"
+#include "Arduino.h"
 
 static int fadeAmount = FADE_AMOUNT;
 
