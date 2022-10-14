@@ -6,6 +6,7 @@
 #include "Score.h"
 #include "Interrupts.h"
 #include "Status.h"
+#include "PowerSave.h"
 #include <TimerOne.h>
 #include <EnableInterrupt.h>
 
@@ -86,14 +87,14 @@ void loop()
             setBrightness(brightness, LS);
             if (getGameStatus() == -1)
             {
-                // TODO: Deep sleep triggered
-                // TODO: Attach interrupt to all buttons to wakeup Arduino
                 //  Remove timer1 handler
                 Timer1.detachInterrupt();
                 // Removed interrupt handler
-                disableInterrupt(BPins[0]);
+                detachInterrupt(BPins[0]);
                 // Reset game status
                 resetGame();
+                // Deep sleep triggered, all buttons trigger interrupts to wakeup arduino
+                sleep();
                 // Reset status
                 status = 0;
             }
@@ -102,7 +103,7 @@ void loop()
                 // Remove timer1 handler
                 Timer1.detachInterrupt();
                 // Removed interrupt handler
-                disableInterrupt(BPins[0]);
+                detachInterrupt(BPins[0]);
                 Serial.println("Go!");
                 brightness = FADE_LIMIT_MIN;
                 setBrightness(brightness, LS);
@@ -157,7 +158,7 @@ void loop()
                 // Remove all button interrupts
                 for (int i = 0; i < N; i++)
                 {
-                    disableInterrupt(BPins[i]);
+                    detachInterrupt(BPins[i]);
                 }
                 bool guess = comparePattern(pattern, statusL, N);
                 if (guess)
