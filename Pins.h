@@ -19,6 +19,5 @@
 
 extern int BPins[N];
 extern int LPins[N];
-extern bool LStatus[N];
 
 #endif
