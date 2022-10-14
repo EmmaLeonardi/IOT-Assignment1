@@ -1,4 +1,5 @@
 #include "Interrupts.h"
+#include "Pins.h"
 
 /*Interrupt handler, to play the game*/
 void interruptLed(){
@@ -31,10 +32,14 @@ void deepSleepEvent(){
     gameStarts=-1;
 }
 
+/*Interrupt handler, called when game over*/
 void timeHasEnded(){
     endTime=1;
 }
 
+/*Returns the status of endTime
+0 if the time hasn't ended
+1 if the time has ended*/
 int getEndTime(){
     return endTime;
 }
@@ -42,4 +47,52 @@ int getEndTime(){
 /*Function to reset the endTime*/
 void resetEndTime(){
     endTime=0;
+}
+
+/*Button 0 handler, turns on and off the led 0*/
+void buttonPressed0(){
+    int i=0;
+    if(statusL[i]==false){
+        digitalWrite(LPins[i],HIGH);
+        statusL[i]=true;
+    }else{
+        digitalWrite(LPins[i],LOW);
+        statusL[i]=false;
+    }
+}
+
+/*Button 1 handler, turns on and off the led 1*/
+void buttonPressed1(){
+    int i=1;
+    if(statusL[i]==false){
+        digitalWrite(LPins[i],HIGH);
+        statusL[i]=true;
+    }else{
+        digitalWrite(LPins[i],LOW);
+        statusL[i]=false;
+    }
+}
+
+/*Button 2 handler, turns on and off the led 2*/
+void buttonPressed2(){
+    int i=2;
+    if(statusL[i]==false){
+        digitalWrite(LPins[i],HIGH);
+        statusL[i]=true;
+    }else{
+        digitalWrite(LPins[i],LOW);
+        statusL[i]=false;
+    }
+}
+
+/*Button 3 handler, turns on and off the led 3*/
+void buttonPressed3(){
+    int i=3;
+    if(statusL[i]==false){
+        digitalWrite(LPins[i],HIGH);
+        statusL[i]=true;
+    }else{
+        digitalWrite(LPins[i],LOW);
+        statusL[i]=false;
+    }
 }

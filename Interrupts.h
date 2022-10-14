@@ -36,4 +36,16 @@ int getEndTime();
 /*Function to reset the endTime*/
 void resetEndTime();
 
+/*Button 0 handler, turns on and off the led 0*/
+void buttonPressed0();
+
+/*Button 1 handler, turns on and off the led 1*/
+void buttonPressed1();
+
+/*Button 2 handler, turns on and off the led 2*/
+void buttonPressed2();
+
+/*Button 3 handler, turns on and off the led 3*/
+void buttonPressed3();
+
 #endif
