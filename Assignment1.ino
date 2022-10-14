@@ -96,6 +96,7 @@ void loop()
                 Serial.println("Go!");
                 brightness = FADE_LIMIT_MIN;
                 setBrightness(brightness, LS);
+                //Reset score, next part of game
                 score = 0;
                 status = 1;
                 hasPrinted = false;
@@ -110,8 +111,7 @@ void loop()
         break;
     case (1):;
         {
-            // Waiting a t1 random Show
-
+            // Waiting a t1 random time
             delay(randomWaitTime());
             // Generate pattern
             generatePattern(pattern, N);
@@ -133,14 +133,15 @@ void loop()
                 hasPrinted = true;
                 Timer1.initialize(timeGuess * USECTOSEC);
                 Timer1.attachInterrupt(timeHasEnded);
-                // Connect all buttons with the interrupts to all the leds
-                // Keep status updated
+                // TODO: Connect all buttons with the interrupts to all the leds
+                // TODO: Keep status updated
             }
             if (getEndTime() == 1)
             {
+                hasPrinted=false;
                 // The time has ended
                 Timer1.detachInterrupt();
-                // Remove all button interrupts 
+                //TODO: Remove all button interrupts 
                 bool guess = comparePattern(pattern, LStatus, N);
                 if (guess)
                 {
@@ -149,7 +150,10 @@ void loop()
                 }
                 else
                 {
+                    //Guessed wrong
                     Serial.println("Penality!");
+                    //Red led turns on 1 second, then turned off
+                    turnLedOnFor(LS,PENALITYLEDON);
                     if (addPenality() == false)
                     {
                         // Game over
@@ -166,15 +170,25 @@ void loop()
         break;
     case (3):;
         {
-            // Aumento punteggio, stampo punteggio
-            // Torno a 1
+            // Increase score, print score
+            score+=countPoints(lv);
+            Serial.print("New point! Score: ");
+            Serial.println(score);
+            // Speedup
+            timeGuess=nextMemorizeTime(timeGuess);
+            timeShow=nextLevelTime(timeGuess);
+            // Back to pattern generation
+            status=1;
         }
         break;
     case (4):;
         {
-            // Stampa game over, punteggio, difficoltà
-            // Ritorna dopo tot in 1
-            // resetta game started
+            // Game over
+            Serial.print("Game Over. Final Score: ");
+            Serial.println(score);
+            delay(GAMEOVERWAIT);
+            // New game
+            status=1;
         }
         break;
     default:
