@@ -29,3 +29,11 @@ void setStatusAsGiven(bool *pattern, bool *status, int SIZE)
         status[i] = pattern[i];
     }
 }
+
+/*Turns on the led to the pin given for the time set */
+void turnLedOnFor(int pinLed, int time)
+{
+    digitalWrite(pinLed, HIGH);
+    delay(time);
+    digitalWrite(pinLed, LOW);
+}
