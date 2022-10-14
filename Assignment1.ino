@@ -9,25 +9,40 @@
 #include <TimerOne.h>
 #include <EnableInterrupt.h>
 
+/*The status of the main leds, used to compare the created pattern to the user pattern
+false->off/LOW, true->on/HIGH
+*/
 bool statusL[N];
-// 0->spenti, 1->accesi
-
-int status;
-int lv = 0;
-bool hasPrinted = false;
-int brightness = 0;
-int score = 0;
-bool pattern[N];
-int timeShow = 0;
-int timeGuess = 0;
 
 /*
-0->il gioco è nel menù iniziale, decidi difficoltà
-1->sto generando il pattern dei led
-2->il giocatore sta creando il suo pattern
-3->controllo pattern, controllo errori e aumento punti (3->1)
+0->the main menu, choose difficulty
+1->generating the led pattern
+2->the player is guessing the pattern
+3->guessed rigth, increase score and decrease time
 4->game over
 */
+int status;
+
+// The level of difficulty of the game, chosen at the start
+int lv = 0;
+
+// Used to print only once instructions
+bool hasPrinted = false;
+
+// The brigthness of the fading led
+int brightness = 0;
+
+// The game score
+int score = 0;
+
+// The pattern of leds to guess
+bool pattern[N];
+
+// The time for which the pattern is shown
+int timeShow = 0;
+
+// The time given to guess the pattern
+int timeGuess = 0;
 
 void setup()
 {
@@ -96,12 +111,12 @@ void loop()
                 Serial.println("Go!");
                 brightness = FADE_LIMIT_MIN;
                 setBrightness(brightness, LS);
-                //Reset score, next part of game
+                // Reset score, next part of game
                 score = 0;
                 status = 1;
                 hasPrinted = false;
                 resetGame();
-                turnAllOff(LPins, LStatus, N);
+                turnAllOff(LPins, statusL, N);
             }
             else
             {
@@ -138,11 +153,11 @@ void loop()
             }
             if (getEndTime() == 1)
             {
-                hasPrinted=false;
+                hasPrinted = false;
                 // The time has ended
                 Timer1.detachInterrupt();
-                //TODO: Remove all button interrupts 
-                bool guess = comparePattern(pattern, LStatus, N);
+                // TODO: Remove all button interrupts
+                bool guess = comparePattern(pattern, statusL, N);
                 if (guess)
                 {
                     // Guessed rigth!
@@ -150,10 +165,10 @@ void loop()
                 }
                 else
                 {
-                    //Guessed wrong
+                    // Guessed wrong
                     Serial.println("Penality!");
-                    //Red led turns on 1 second, then turned off
-                    turnLedOnFor(LS,PENALITYLEDON);
+                    // Red led turns on 1 second, then turned off
+                    turnLedOnFor(LS, PENALITYLEDON);
                     if (addPenality() == false)
                     {
                         // Game over
@@ -171,14 +186,14 @@ void loop()
     case (3):;
         {
             // Increase score, print score
-            score+=countPoints(lv);
+            score += countPoints(lv);
             Serial.print("New point! Score: ");
             Serial.println(score);
             // Speedup
-            timeGuess=nextMemorizeTime(timeGuess);
-            timeShow=nextLevelTime(timeGuess);
+            timeGuess = nextMemorizeTime(timeGuess);
+            timeShow = nextLevelTime(timeGuess);
             // Back to pattern generation
-            status=1;
+            status = 1;
         }
         break;
     case (4):;
@@ -188,7 +203,7 @@ void loop()
             Serial.println(score);
             delay(GAMEOVERWAIT);
             // New game
-            status=1;
+            status = 0;
         }
         break;
     default:
