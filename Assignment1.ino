@@ -9,11 +9,6 @@
 #include <TimerOne.h>
 #include <EnableInterrupt.h>
 
-/*The status of the main leds, used to compare the created pattern to the user pattern
-false->off/LOW, true->on/HIGH
-*/
-bool statusL[N];
-
 /*
 0->the main menu, choose difficulty
 1->generating the led pattern
