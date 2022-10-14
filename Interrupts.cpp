@@ -1,5 +1,6 @@
 #include "Interrupts.h"
 #include "Pins.h"
+#include "Arduino.h"
 
 /*Interrupt handler, to play the game*/
 void interruptLed(){
