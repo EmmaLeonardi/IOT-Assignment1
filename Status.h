@@ -10,6 +10,6 @@ void turnAllOn(int *ledArray, bool *status, int SIZE);
 /*Copies the pattern in the array to the status array*/
 void setStatusAsGiven(bool *pattern, bool *status, int SIZE);
 
-/*Turns on the led to the pin given for the time set */
+/*Turns on the led to the pin given for the time set in seconds*/
 void turnLedOnFor(int pinLed, int time);
 #endif

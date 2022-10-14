@@ -30,7 +30,7 @@ void setStatusAsGiven(bool *pattern, bool *status, int SIZE)
     }
 }
 
-/*Turns on the led to the pin given for the time set */
+/*Turns on the led to the pin given for the time set in seconds*/
 void turnLedOnFor(int pinLed, int time)
 {
     digitalWrite(pinLed, HIGH);
