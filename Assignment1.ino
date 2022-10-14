@@ -143,15 +143,22 @@ void loop()
                 hasPrinted = true;
                 Timer1.initialize(timeGuess * USECTOSEC);
                 Timer1.attachInterrupt(timeHasEnded);
-                // TODO: Connect all buttons with the interrupts to all the leds
-                // TODO: Keep status updated
+                // Connect all buttons with the interrupts to all the leds, keeping status updated
+                enableInterrupt(BPins[0], buttonPressed0, CHANGE);
+                enableInterrupt(BPins[1], buttonPressed1, CHANGE);
+                enableInterrupt(BPins[2], buttonPressed2, CHANGE);
+                enableInterrupt(BPins[3], buttonPressed3, CHANGE);
             }
             if (getEndTime() == 1)
             {
                 hasPrinted = false;
                 // The time has ended
                 Timer1.detachInterrupt();
-                // TODO: Remove all button interrupts
+                // Remove all button interrupts
+                for (int i = 0; i < N; i++)
+                {
+                    disableInterrupt(BPins[i]);
+                }
                 bool guess = comparePattern(pattern, statusL, N);
                 if (guess)
                 {
