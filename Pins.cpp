@@ -3,7 +3,7 @@
 int BPins[N] = {7, 6, 5, 4};
 
 /*Array of the led pins*/
-int LPins[N] = {11, 10, 9, 8};
+int LPins[N] = {12, 10, 9, 8};
 
 /*The status of the leds, to know if a given led is on or off
 false->off/LOW, true->on/HIGH

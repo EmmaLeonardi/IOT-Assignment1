@@ -6,8 +6,8 @@
 // A free analog pin (not connected) used to initialize a random generator
 #define AnalogFree A0
 
-// The pin of the red led
-#define LS 12
+// The pin of the red led, has to support PWM
+#define LS 11
 
 // The analog pin of the potentiometer
 #define Pot 1
