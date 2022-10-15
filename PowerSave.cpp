@@ -1,3 +1,4 @@
+#define LIBCALL_ENABLEINTERRUPT
 #include <avr/sleep.h>
 #include <EnableInterrupt.h>
 #include "PowerSave.h"
@@ -9,7 +10,7 @@ void sleep(){
     set_sleep_mode(SLEEP_MODE_PWR_DOWN);
     sleep_enable();
     for(int i=0; i<N; i++){
-        attachInterrupt(BPins[i],wakeup,CHANGE);
+        enableInterrupt(BPins[i],wakeup,CHANGE);
     }
     sleep_mode();
 
@@ -20,6 +21,6 @@ unconnects all interrupts to all the button pins*/
 void wakeup(){
     sleep_disable();
     for(int i=0; i<N; i++){
-        detachInterrupt(BPins[i]);
+        disableInterrupt(BPins[i]);
     }
 }
