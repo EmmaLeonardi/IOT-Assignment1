@@ -90,7 +90,7 @@ void loop()
                 //  Remove timer1 handler
                 Timer1.detachInterrupt();
                 // Removed interrupt handler
-                detachInterrupt(BPins[0]);
+                disableInterrupt(BPins[0]);
                 // Reset game status
                 resetGame();
                 // Deep sleep triggered, all buttons trigger interrupts to wakeup arduino
@@ -103,7 +103,7 @@ void loop()
                 // Remove timer1 handler
                 Timer1.detachInterrupt();
                 // Removed interrupt handler
-                detachInterrupt(BPins[0]);
+                disableInterrupt(BPins[0]);
                 Serial.println("Go!");
                 brightness = FADE_LIMIT_MIN;
                 setBrightness(brightness, LS);
@@ -158,7 +158,7 @@ void loop()
                 // Remove all button interrupts
                 for (int i = 0; i < N; i++)
                 {
-                    detachInterrupt(BPins[i]);
+                    disableInterrupt(BPins[i]);
                 }
                 bool guess = comparePattern(pattern, statusL, N);
                 if (guess)
