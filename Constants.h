@@ -18,4 +18,7 @@
 // The conversion from sec to usec 1000000 usec = 1 sec
 #define USECTOSEC 1000000
 
+//The conversion from msec to sec 1000 msec=1 sec
+#define MSECTOSEC 1000
+
 #endif
