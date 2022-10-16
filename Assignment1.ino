@@ -40,6 +40,9 @@ int timeShow = 0;
 // The time given to guess the pattern
 int timeGuess = 0;
 
+// If the debug symbol has been defined, extra prints appear on the console as testing checks
+#define DEBUG
+
 void setup()
 {
     for (int i = 0; i < N; i++)
@@ -54,6 +57,9 @@ void setup()
     Serial.begin(9600);
     srand(analogRead(AnalogFree));
     Serial.flush();
+#ifdef DEBUG
+    Serial.println("Debug activated, setup correct");
+#endif
 }
 
 void loop()
@@ -66,10 +72,16 @@ void loop()
             {
                 Serial.println("Welcome to the Catch the Led Pattern Game. Press Key T1 to Start.");
                 hasPrinted = true;
+#ifdef DEBUG
+                Serial.println("D: Connecting the button interrupt and timer");
+#endif
                 // Turn on interrupts for B1
                 enableInterrupt(BPins[0], startGame, CHANGE);
                 Timer1.initialize(WAITFORSTART * USECTOSEC);
                 Timer1.attachInterrupt(deepSleepEvent);
+#ifdef DEBUG
+                Serial.println("D: Connected interrupts");
+#endif
             }
             int pValue = analogRead(Pot);
             int tmp = map(pValue, POTMIN, POTMAX, LVMIN, LVMAX);
@@ -87,19 +99,33 @@ void loop()
             setBrightness(brightness, LS);
             if (getGameStatus() == -1)
             {
+#ifdef DEBUG
+                Serial.println("D: Timer event has run out, system entering deep sleep mode");
+#endif
                 //  Remove timer1 handler
                 Timer1.detachInterrupt();
                 // Removed interrupt handler
                 disableInterrupt(BPins[0]);
                 // Reset game status
                 resetGame();
+                // Turning off LS
+                brightness = FADE_LIMIT_MIN;
+                setBrightness(brightness, LS);
                 // Deep sleep triggered, all buttons trigger interrupts to wakeup arduino
                 sleep();
                 // Reset status
                 status = 0;
+                // Reset has printed
+                hasPrinted = false;
+#ifdef DEBUG
+                Serial.println("D: System has exited deep sleep mode");
+#endif
             }
             else if (getGameStatus() == 1)
             {
+#ifdef DEBUG
+                Serial.println("D: Interrupt on button activated, game starting");
+#endif
                 // Remove timer1 handler
                 Timer1.detachInterrupt();
                 // Removed interrupt handler
@@ -112,6 +138,7 @@ void loop()
                 status = 1;
                 hasPrinted = false;
                 resetGame();
+                resetPenality();
                 turnAllOff(LPins, statusL, N);
             }
             else
@@ -122,6 +149,9 @@ void loop()
         break;
     case (1):;
         {
+#ifdef DEBUG
+            Serial.println("D: Generating a led pattern");
+#endif
             // Waiting a t1 random time
             delay(randomWaitTime());
             // Generate pattern
@@ -129,11 +159,19 @@ void loop()
             // Turn on led
             setPattern(pattern, LPins, N);
             setStatusAsGiven(pattern, statusL, N);
+#ifdef DEBUG
+            Serial.println("D: Waiting for the player to memorize");
+#endif
             // Wait
             delay(timeShow);
             // Turn off all leds
             turnAllOff(LPins, statusL, N);
             status = 2;
+#ifdef DEBUG
+            Serial.println("D: Going to next fase");
+            Serial.print("Difficulty: ");
+            Serial.println(lv);
+#endif
         }
         break;
     case (2):;
@@ -144,6 +182,9 @@ void loop()
                 hasPrinted = true;
                 Timer1.initialize(timeGuess * USECTOSEC);
                 Timer1.attachInterrupt(timeHasEnded);
+#ifdef DEBUG
+                Serial.println("D: Connecting to all buttons to interrupts, to change the corrisponding led status");
+#endif
                 // Connect all buttons with the interrupts to all the leds, keeping status updated
                 enableInterrupt(BPins[0], buttonPressed0, CHANGE);
                 enableInterrupt(BPins[1], buttonPressed1, CHANGE);
@@ -152,33 +193,55 @@ void loop()
             }
             if (getEndTime() == 1)
             {
+#ifdef DEBUG
+                Serial.println("D: Time out");
+#endif
                 hasPrinted = false;
                 // The time has ended
                 Timer1.detachInterrupt();
+#ifdef DEBUG
+                Serial.println("D: Removing all interrupts");
+#endif
                 // Remove all button interrupts
                 for (int i = 0; i < N; i++)
                 {
                     disableInterrupt(BPins[i]);
                 }
+#ifdef DEBUG
+                Serial.println("D: Comparing patterns");
+#endif
                 bool guess = comparePattern(pattern, statusL, N);
                 if (guess)
                 {
+#ifdef DEBUG
+                    Serial.println("D: Guessed rigth");
+#endif
                     // Guessed rigth!
                     status = 3;
                 }
                 else
                 {
+#ifdef DEBUG
+                    Serial.println("D: Guessed wrong");
+#endif
                     // Guessed wrong
                     Serial.println("Penality!");
                     // Red led turns on 1 second, then turned off
                     turnLedOnFor(LS, PENALITYLEDON);
                     if (addPenality() == false)
                     {
+#ifdef DEBUG
+                        Serial.println("D: Game over");
+#endif
                         // Game over
                         status = 4;
                     }
                     else
                     {
+#ifdef DEBUG
+                        Serial.print("D: Not yet game over, penality number ");
+                        Serial.println(getPenality());
+#endif
                         // Guessed wrong, try again
                         status = 2;
                     }
@@ -188,13 +251,22 @@ void loop()
         break;
     case (3):;
         {
+#ifdef DEBUG
+            Serial.println("D: Next round soon:");
+#endif
             // Increase score, print score
             score += countPoints(lv);
             Serial.print("New point! Score: ");
             Serial.println(score);
             // Speedup
-            timeGuess = nextMemorizeTime(timeGuess);
-            timeShow = nextLevelTime(timeGuess);
+            timeShow = nextMemorizeTime(timeShow);
+            timeGuess = nextLevelTime(timeGuess);
+#ifdef DEBUG
+            Serial.print("D: Time to memorize");
+            Serial.println(timeShow);
+            Serial.print("D: Time to guess");
+            Serial.println(timeGuess);
+#endif
             // Back to pattern generation
             status = 1;
         }
@@ -210,7 +282,9 @@ void loop()
         }
         break;
     default:
-        //??
+#ifdef DEBUG
+        Serial.println("Empty case, should never be accessed");
+#endif
         ;
         {
         }
