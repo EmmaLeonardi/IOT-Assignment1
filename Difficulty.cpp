@@ -101,3 +101,8 @@ bool addPenality(){
 void resetPenality(){
     penalityN=0;
 }
+
+/*Returns the number of penalities*/
+int getPenality(){
+    return penalityN;
+}

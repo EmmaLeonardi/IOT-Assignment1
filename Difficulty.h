@@ -39,4 +39,7 @@ bool addPenality();
 /*Resets the number of penalities*/
 void resetPenality();
 
+/*Returns the number of penalities*/
+int getPenality();
+
 #endif
