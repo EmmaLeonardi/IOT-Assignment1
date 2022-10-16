@@ -42,7 +42,7 @@ int timeGuess = 0;
 
 void setup()
 {
-    for (int i = 0; i++; i < N)
+    for (int i = 0; i < N; i++)
     {
         pinMode(LPins[i], OUTPUT);
         pinMode(BPins[i], INPUT);
