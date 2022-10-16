@@ -13,8 +13,8 @@
 // The time to wait after a game over before a new game can be started
 #define GAMEOVERWAIT 10
 
-// The time to turn on the penality led after a penality
-#define PENALITYLEDON 1
+// The time to turn on the penalty led after a penalty
+#define PENALTYLEDON 1
 
 /*Returns the start time for the difficulty level selected.
 The level has to be between 1 (easiest) and LV (hardest, defined in constants), otherwise returns -1*/
@@ -33,13 +33,13 @@ int nextMemorizeTime(int previousTime);
 /*Returns the time for a random wait between MIN and MAX */
 int randomWaitTime();
 
-/*Adds a penality, returns true if the number is less than PENALITY MAX, otherwise false*/
-bool addPenality();
+/*Adds a penalty*/
+void addPenalty();
 
-/*Resets the number of penalities*/
-void resetPenality();
+/*Resets the number of penalties*/
+void resetPenalty();
 
-/*Returns the number of penalities*/
-int getPenality();
+/*Returns the number of penalties*/
+int getPenalty();
 
 #endif
