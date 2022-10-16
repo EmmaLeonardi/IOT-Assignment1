@@ -89,7 +89,7 @@ void loop()
             {
                 // The difficulty has changed
                 lv = tmp;
-                Serial.print("Difficulty set to: ");
+                Serial.print("D: Difficulty set to: ");
                 Serial.println(lv);
                 timeShow = getStartTime(lv);
                 timeGuess = getMemorizeTime(lv);
@@ -138,7 +138,7 @@ void loop()
                 status = 1;
                 hasPrinted = false;
                 resetGame();
-                resetPenality();
+                resetPenalty();
                 turnAllOff(LPins, statusL, N);
             }
             else
@@ -152,6 +152,7 @@ void loop()
 #ifdef DEBUG
             Serial.println("D: Generating a led pattern");
 #endif
+
             // Waiting a t1 random time
             delay(randomWaitTime());
             // Generate pattern
@@ -169,7 +170,7 @@ void loop()
             status = 2;
 #ifdef DEBUG
             Serial.println("D: Going to next fase");
-            Serial.print("Difficulty: ");
+            Serial.print("D: Difficulty: ");
             Serial.println(lv);
 #endif
         }
@@ -184,6 +185,10 @@ void loop()
                 Timer1.attachInterrupt(timeHasEnded);
 #ifdef DEBUG
                 Serial.println("D: Connecting to all buttons to interrupts, to change the corrisponding led status");
+                Serial.print("D: Memory time: ");
+                Serial.println(timeShow);
+                Serial.print("D: Guess time: ");
+                Serial.println(timeGuess);
 #endif
                 // Connect all buttons with the interrupts to all the leds, keeping status updated
                 enableInterrupt(BPins[0], buttonPressed0, CHANGE);
@@ -225,10 +230,11 @@ void loop()
                     Serial.println("D: Guessed wrong");
 #endif
                     // Guessed wrong
-                    Serial.println("Penality!");
+                    Serial.println("Penalty!");
                     // Red led turns on 1 second, then turned off
-                    turnLedOnFor(LS, PENALITYLEDON);
-                    if (addPenality() == false)
+                    turnLedOnFor(LS, PENALTYLEDON);
+                    addPenalty();
+                    if (getPenalty() == PENALTYMAX)
                     {
 #ifdef DEBUG
                         Serial.println("D: Game over");
@@ -239,8 +245,8 @@ void loop()
                     else
                     {
 #ifdef DEBUG
-                        Serial.print("D: Not yet game over, penality number ");
-                        Serial.println(getPenality());
+                        Serial.print("D: Not yet game over, penalty number ");
+                        Serial.println(getPenalty());
 #endif
                         // Guessed wrong, try again
                         status = 2;
@@ -276,6 +282,10 @@ void loop()
             // Game over
             Serial.print("Game Over. Final Score: ");
             Serial.println(score);
+#ifdef DEBUG
+            Serial.print("D: Number of penalties ");
+            Serial.println(getPenalty());
+#endif
             delay(GAMEOVERWAIT);
             // New game
             status = 0;
