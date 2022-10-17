@@ -188,7 +188,7 @@ void loop()
         break;
     case (2):;
         {
-            if (hasPrinted)
+            if (hasPrinted==false)
             {
                 hasPrinted = true;
                 // Turn on led
