@@ -221,6 +221,7 @@ void loop()
                 // Red led turns on 1 second, then turned off
                 turnLedOnFor(LS, PENALTYLEDON);
                 addPenalty();
+                resetPatternPressed();
                 if (getPenalty() == PENALTYMAX)
                 {
 #ifdef DEBUG
@@ -324,6 +325,8 @@ void loop()
                 Serial.println();
 #endif
                 bool guess = comparePattern(pattern, statusL, N);
+                // Turn off all leds
+                turnAllOff(LPins, statusL, N);
                 if (guess)
                 {
 #ifdef DEBUG
