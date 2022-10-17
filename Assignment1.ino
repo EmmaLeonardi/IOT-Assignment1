@@ -162,7 +162,7 @@ void loop()
         break;
     case (1):;
         {
-            if (hasPrinted==false)
+            if (hasPrinted == false)
             {
                 hasPrinted = true;
                 // Generate pattern
@@ -188,7 +188,7 @@ void loop()
         break;
     case (2):;
         {
-            if (hasPrinted==false)
+            if (hasPrinted == false)
             {
                 hasPrinted = true;
                 // Turn on led
@@ -197,16 +197,58 @@ void loop()
 #ifdef DEBUG
                 Serial.println("D: Waiting for the player to memorize");
 #endif
-                // TODO: Attach interrupts to buttons that give a penality
+                // Attach interrupts to buttons that give a penality
+                resetPatternPressed();
+                for (int i = 0; i < N; i++)
+                {
+                    enableInterrupt(BPins[i], patternPressed, CHANGE);
+                }
                 previousTime = millis();
             }
-
             // Wait
+            if (getPatternPressed() != 0)
+            {
+                hasPrinted=false;
+                // A button was pressed->penality!!
+                turnAllOff(LPins, statusL, N);
+                // Remove all button interrupts
+                for (int i = 0; i < N; i++)
+                {
+                    disableInterrupt(BPins[i]);
+                }
+                // Guessed wrong
+                Serial.println("Penalty!");
+                // Red led turns on 1 second, then turned off
+                turnLedOnFor(LS, PENALTYLEDON);
+                addPenalty();
+                if (getPenalty() == PENALTYMAX)
+                {
+#ifdef DEBUG
+                    Serial.println("D: Game over");
+#endif
+                    // Game over
+                    status = 5;
+                }
+                else
+                {
+#ifdef DEBUG
+                    Serial.print("D: Not yet game over, penalty number ");
+                    Serial.println(getPenalty());
+#endif
+                    // Pressed button, try again
+                    status = 1;
+                }
+            }
             unsigned long now = millis();
             if (now - previousTime >= timeShow * MSECTOSEC)
             {
                 // Turn off all leds
                 turnAllOff(LPins, statusL, N);
+                // Remove all button interrupts
+                for (int i = 0; i < N; i++)
+                {
+                    disableInterrupt(BPins[i]);
+                }
                 status = 3;
                 previousTime = now;
                 hasPrinted = false;
@@ -248,7 +290,7 @@ void loop()
             {
                 timeHasEnded();
                 previousTime = now;
-                hasPrinted=false;
+                hasPrinted = false;
             }
 
             if (getEndTime() == 1)
@@ -345,16 +387,38 @@ void loop()
         break;
     case (5):;
         {
-            // Game over
-            Serial.print("Game Over. Final Score: ");
-            Serial.println(score);
+            if (hasPrinted == false)
+            {
+                hasPrinted = true;
+                // Game over
+                Serial.print("Game Over. Final Score: ");
+                Serial.println(score);
+                // Reset the game
+                resetGame();
+                // Reset penalty
+                resetPenalty();
+                // Reset score
+                score = 0;
+                // Turn off all game leds
+                turnAllOff(LPins, statusL, N);
+                //Reset all functions, it's game over
+                resetEndTime();
+                resetPatternPressed();
+                resetPenalty();
 #ifdef DEBUG
-            Serial.print("D: Number of penalties ");
-            Serial.println(getPenalty());
+                Serial.print("D: Number of penalties ");
+                Serial.println(getPenalty());
 #endif
-            delay(GAMEOVERWAIT);
-            // New game
-            status = 0;
+                previousTime = millis();
+            }
+
+            unsigned long now = millis();
+            if (now - previousTime >= GAMEOVERWAIT * MSECTOSEC)
+            {
+                //New game
+                status=0;
+                previousTime = now;
+            }
         }
         break;
     default:
