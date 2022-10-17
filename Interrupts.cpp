@@ -97,3 +97,20 @@ void buttonPressed3(){
         statusL[i]=false;
     }
 }
+
+/*Interrupt handler, called when the pattern is shown*/
+void patternPressed(){
+    patternPress=1;
+}
+
+/*Function to restart patternPressed*/
+void resetPatternPressed(){
+    patternPress=0;
+}
+
+/*Returns the value of patterPressed,
+1-> if a patternPressed was called
+0-> otherwise*/
+int getPatternPressed(){
+    return patternPress;
+}

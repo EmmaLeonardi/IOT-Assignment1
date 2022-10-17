@@ -7,6 +7,9 @@ volatile static int gameStarts;
 // This variable is set to 1 when the function end time is called, otherwise 0
 volatile static int endTime;
 
+// This variable is set to 1 when the function pattern press is called, otherwise 0
+volatile static int patternPress;
+
 /*Interrupt handler, to play the game*/
 void interruptLed();
 
@@ -25,7 +28,7 @@ int getGameStatus();
 /*Interrupt handler for the timer*/
 void deepSleepEvent();
 
-/*Interrupt handler, called when game over*/
+/*Interrupt handler, called when time has ended*/
 void timeHasEnded();
 
 /*Returns the status of endTime
@@ -47,5 +50,16 @@ void buttonPressed2();
 
 /*Button 3 handler, turns on and off the led 3*/
 void buttonPressed3();
+
+/*Interrupt handler, called when the pattern is shown*/
+void patternPressed();
+
+/*Function to restart patternPressed*/
+void resetPatternPressed();
+
+/*Returns the value of patterPressed,
+1-> if a patternPressed was called
+0-> otherwise*/
+int getPatternPressed();
 
 #endif
