@@ -74,22 +74,23 @@ void loop()
             {
                 Serial.println("Welcome to the Catch the Led Pattern Game. Press Key T1 to Start.");
                 hasPrinted = true;
-                previousTime=millis();
-                //Reset the game
+                // Reset the game
                 resetGame();
-                //Reset penalty
+                // Reset penalty
                 resetPenalty();
-                //Reset score
-                score=0;
-                //Turn off all game leds
+                // Reset score
+                score = 0;
+                // Turn off all game leds
                 turnAllOff(LPins, statusL, N);
 #ifdef DEBUG
                 Serial.println("D: Connecting the button interrupt and timer");
 #endif
                 // Turn on interrupts for B1
                 enableInterrupt(BPins[0], startGame, CHANGE);
+                previousTime = millis();
 #ifdef DEBUG
-                Serial.println("D: Connected interrupts");
+                Serial.print("D: Inizialized previous time, value");
+                Serial.println(previousTime);
 #endif
             }
             int pValue = analogRead(Pot);
@@ -107,7 +108,7 @@ void loop()
             brightness = nextStep(brightness);
             setBrightness(brightness, LS);
             unsigned long now = millis();
-            if (previousTime - now >= WAITFORSTART*MSECTOSEC)
+            if (now-previousTime>= WAITFORSTART * MSECTOSEC)
             {
                 deepSleepEvent();
                 previousTime = now;
@@ -189,7 +190,6 @@ void loop()
             {
                 // I have t3 time to guess
                 hasPrinted = true;
-                previousTime=millis();
 #ifdef DEBUG
                 Serial.println("D: Connecting to all buttons to interrupts, to change the corrisponding led status");
                 Serial.print("D: Memory time: ");
@@ -202,9 +202,15 @@ void loop()
                 enableInterrupt(BPins[1], buttonPressed1, CHANGE);
                 enableInterrupt(BPins[2], buttonPressed2, CHANGE);
                 enableInterrupt(BPins[3], buttonPressed3, CHANGE);
+
+                previousTime = millis();
+#ifdef DEBUG
+                Serial.print("D: Set timer interrupt, millis value is");
+                Serial.println(previousTime);
+#endif
             }
             unsigned long now = millis();
-            if (previousTime - now >= timeGuess*MSECTOSEC)
+            if (now- previousTime >= timeGuess * MSECTOSEC)
             {
                 timeHasEnded();
                 previousTime = now;
