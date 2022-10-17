@@ -2,10 +2,10 @@
 #define INTERRUPTS_H
 
 // This variable is set to 1 when the function start game is called, -1 if the timer ticked, otherwise 0
-static int gameStarts;
+volatile static int gameStarts;
 
 // This variable is set to 1 when the function end time is called, otherwise 0
-static int endTime;
+volatile static int endTime;
 
 /*Interrupt handler, to play the game*/
 void interruptLed();
