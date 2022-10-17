@@ -108,7 +108,7 @@ void loop()
             brightness = nextStep(brightness);
             setBrightness(brightness, LS);
             unsigned long now = millis();
-            if (now-previousTime>= WAITFORSTART * MSECTOSEC)
+            if (now - previousTime >= WAITFORSTART * MSECTOSEC)
             {
                 deepSleepEvent();
                 previousTime = now;
@@ -210,7 +210,7 @@ void loop()
 #endif
             }
             unsigned long now = millis();
-            if (now- previousTime >= timeGuess * MSECTOSEC)
+            if (now - previousTime >= timeGuess * MSECTOSEC)
             {
                 timeHasEnded();
                 previousTime = now;
