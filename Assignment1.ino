@@ -7,7 +7,6 @@
 #include "Interrupts.h"
 #include "Status.h"
 #include "PowerSave.h"
-#include <TimerOne.h>
 #include <EnableInterrupt.h>
 
 /*
@@ -39,6 +38,9 @@ int timeShow = 0;
 
 // The time given to guess the pattern
 int timeGuess = 0;
+
+// This variable is used to store the time
+unsigned long previousTime = 0;
 
 // If the debug symbol has been defined, extra prints appear on the console as testing checks
 #define DEBUG
@@ -72,13 +74,20 @@ void loop()
             {
                 Serial.println("Welcome to the Catch the Led Pattern Game. Press Key T1 to Start.");
                 hasPrinted = true;
+                previousTime=millis();
+                //Reset the game
+                resetGame();
+                //Reset penalty
+                resetPenalty();
+                //Reset score
+                score=0;
+                //Turn off all game leds
+                turnAllOff(LPins, statusL, N);
 #ifdef DEBUG
                 Serial.println("D: Connecting the button interrupt and timer");
 #endif
                 // Turn on interrupts for B1
                 enableInterrupt(BPins[0], startGame, CHANGE);
-                Timer1.initialize(WAITFORSTART * USECTOSEC);
-                Timer1.attachInterrupt(deepSleepEvent);
 #ifdef DEBUG
                 Serial.println("D: Connected interrupts");
 #endif
@@ -97,13 +106,17 @@ void loop()
             // Ls pulses
             brightness = nextStep(brightness);
             setBrightness(brightness, LS);
+            unsigned long now = millis();
+            if (previousTime - now >= WAITFORSTART*MSECTOSEC)
+            {
+                deepSleepEvent();
+                previousTime = now;
+            }
             if (getGameStatus() == -1)
             {
 #ifdef DEBUG
                 Serial.println("D: Timer event has run out, system entering deep sleep mode");
 #endif
-                //  Remove timer1 handler
-                Timer1.detachInterrupt();
                 // Removed interrupt handler
                 disableInterrupt(BPins[0]);
                 // Reset game status
@@ -126,8 +139,6 @@ void loop()
 #ifdef DEBUG
                 Serial.println("D: Interrupt on button activated, game starting");
 #endif
-                // Remove timer1 handler
-                Timer1.detachInterrupt();
                 // Removed interrupt handler
                 disableInterrupt(BPins[0]);
                 Serial.println("Go!");
@@ -137,9 +148,6 @@ void loop()
                 score = 0;
                 status = 1;
                 hasPrinted = false;
-                resetGame();
-                resetPenalty();
-                turnAllOff(LPins, statusL, N);
             }
             else
             {
@@ -181,8 +189,7 @@ void loop()
             {
                 // I have t3 time to guess
                 hasPrinted = true;
-                Timer1.initialize(timeGuess * USECTOSEC);
-                Timer1.attachInterrupt(timeHasEnded);
+                previousTime=millis();
 #ifdef DEBUG
                 Serial.println("D: Connecting to all buttons to interrupts, to change the corrisponding led status");
                 Serial.print("D: Memory time: ");
@@ -196,6 +203,13 @@ void loop()
                 enableInterrupt(BPins[2], buttonPressed2, CHANGE);
                 enableInterrupt(BPins[3], buttonPressed3, CHANGE);
             }
+            unsigned long now = millis();
+            if (previousTime - now >= timeGuess*MSECTOSEC)
+            {
+                timeHasEnded();
+                previousTime = now;
+            }
+
             if (getEndTime() == 1)
             {
 #ifdef DEBUG
@@ -203,7 +217,6 @@ void loop()
 #endif
                 hasPrinted = false;
                 // The time has ended
-                Timer1.detachInterrupt();
 #ifdef DEBUG
                 Serial.println("D: Removing all interrupts");
 #endif
