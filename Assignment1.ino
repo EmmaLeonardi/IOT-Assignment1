@@ -93,7 +93,7 @@ void loop()
                 enableInterrupt(BPins[0], startGame, CHANGE);
                 previousTime = millis();
 #ifdef DEBUG
-                Serial.print("D: Inizialized previous time, value");
+                Serial.print("D: Inizialized previous time, value ");
                 Serial.println(previousTime);
 #endif
             }
@@ -248,6 +248,7 @@ void loop()
             {
                 timeHasEnded();
                 previousTime = now;
+                hasPrinted=false;
             }
 
             if (getEndTime() == 1)
@@ -323,7 +324,7 @@ void loop()
     case (4):;
         {
 #ifdef DEBUG
-            Serial.println("D: Next round soon:");
+            Serial.println("D: Next round soon");
 #endif
             // Increase score, print score
             score += countPoints(lv);
@@ -333,9 +334,9 @@ void loop()
             timeShow = nextMemorizeTime(timeShow);
             timeGuess = nextLevelTime(timeGuess);
 #ifdef DEBUG
-            Serial.print("D: Time to memorize");
+            Serial.print("D: Time to memorize ");
             Serial.println(timeShow);
-            Serial.print("D: Time to guess");
+            Serial.print("D: Time to guess ");
             Serial.println(timeGuess);
 #endif
             // Back to pattern generation
