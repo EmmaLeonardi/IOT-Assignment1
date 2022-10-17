@@ -3,7 +3,7 @@
 #include "Constants.h"
 
 // Defines the initial time at the easiest difficulty
-#define EasyStartTime 30
+#define EasyStartTime 15
 
 // Defines the percentage of time reduction for each level that is harder than the easiest one
 #define HarderStartTimePercentage 0.85
