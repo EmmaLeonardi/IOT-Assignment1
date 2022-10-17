@@ -12,17 +12,21 @@
 /*
 0->the main menu, choose difficulty
 1->generating the led pattern
-2->the player is guessing the pattern
-3->guessed rigth, increase score and decrease time
-4->game over
+2->showing the led pattern
+3->the player is guessing the pattern
+4->guessed rigth, increase score and decrease time
+5->game over
 */
 int status;
 
 // The level of difficulty of the game, chosen at the start
 int lv = 0;
 
-// Used to print only once instructions
+// Used to print or do some instructions once
 bool hasPrinted = false;
+
+// The random time to wait between a new pattern is shown
+int wait = 0;
 
 // The brigthness of the fading led
 int brightness = 0;
@@ -158,33 +162,63 @@ void loop()
         break;
     case (1):;
         {
+            if (hasPrinted)
+            {
+                hasPrinted = true;
+                // Generate pattern
+                generatePattern(pattern, N);
 #ifdef DEBUG
-            Serial.println("D: Generating a led pattern");
+                Serial.println("D: Generating a led pattern");
 #endif
-
+                previousTime = millis();
+                wait = randomWaitTime();
+            }
             // Waiting a t1 random time
-            delay(randomWaitTime());
-            // Generate pattern
-            generatePattern(pattern, N);
-            // Turn on led
-            setPattern(pattern, LPins, N);
-            setStatusAsGiven(pattern, statusL, N);
+            unsigned long now = millis();
+            if (now - previousTime >= wait * MSECTOSEC)
+            {
+                status = 2;
+                previousTime = now;
 #ifdef DEBUG
-            Serial.println("D: Waiting for the player to memorize");
+                Serial.println("D: Pattern created");
+                hasPrinted = false;
 #endif
-            // Wait
-            delay(timeShow);
-            // Turn off all leds
-            turnAllOff(LPins, statusL, N);
-            status = 2;
-#ifdef DEBUG
-            Serial.println("D: Going to next fase");
-            Serial.print("D: Difficulty: ");
-            Serial.println(lv);
-#endif
+            }
         }
         break;
     case (2):;
+        {
+            if (hasPrinted)
+            {
+                hasPrinted = true;
+                // Turn on led
+                setPattern(pattern, LPins, N);
+                setStatusAsGiven(pattern, statusL, N);
+#ifdef DEBUG
+                Serial.println("D: Waiting for the player to memorize");
+#endif
+                // TODO: Attach interrupts to buttons that give a penality
+                previousTime = millis();
+            }
+
+            // Wait
+            unsigned long now = millis();
+            if (now - previousTime >= timeShow * MSECTOSEC)
+            {
+                // Turn off all leds
+                turnAllOff(LPins, statusL, N);
+                status = 3;
+                previousTime = now;
+                hasPrinted = false;
+#ifdef DEBUG
+                Serial.println("D: Going to next fase");
+                Serial.print("D: Difficulty: ");
+                Serial.println(lv);
+#endif
+            }
+        }
+        break;
+    case (3):;
         {
             if (hasPrinted == false)
             {
@@ -233,6 +267,18 @@ void loop()
                 }
 #ifdef DEBUG
                 Serial.println("D: Comparing patterns");
+                Serial.print("D: Original pattern ");
+                for (int i = 0; i < N; i++)
+                {
+                    Serial.print(pattern[i]);
+                }
+                Serial.println();
+                Serial.print("D: User pattern ");
+                for (int i = 0; i < N; i++)
+                {
+                    Serial.print(statusL[i]);
+                }
+                Serial.println();
 #endif
                 bool guess = comparePattern(pattern, statusL, N);
                 if (guess)
@@ -241,7 +287,7 @@ void loop()
                     Serial.println("D: Guessed rigth");
 #endif
                     // Guessed rigth!
-                    status = 3;
+                    status = 4;
                 }
                 else
                 {
@@ -259,7 +305,7 @@ void loop()
                         Serial.println("D: Game over");
 #endif
                         // Game over
-                        status = 4;
+                        status = 5;
                     }
                     else
                     {
@@ -274,7 +320,7 @@ void loop()
             }
         }
         break;
-    case (3):;
+    case (4):;
         {
 #ifdef DEBUG
             Serial.println("D: Next round soon:");
@@ -296,7 +342,7 @@ void loop()
             status = 1;
         }
         break;
-    case (4):;
+    case (5):;
         {
             // Game over
             Serial.print("Game Over. Final Score: ");
