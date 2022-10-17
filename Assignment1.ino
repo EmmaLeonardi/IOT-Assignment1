@@ -162,7 +162,7 @@ void loop()
         break;
     case (1):;
         {
-            if (hasPrinted)
+            if (hasPrinted==false)
             {
                 hasPrinted = true;
                 // Generate pattern
@@ -239,7 +239,7 @@ void loop()
 
                 previousTime = millis();
 #ifdef DEBUG
-                Serial.print("D: Set timer interrupt, millis value is");
+                Serial.print("D: Set timer interrupt, millis value is ");
                 Serial.println(previousTime);
 #endif
             }
@@ -314,7 +314,7 @@ void loop()
                         Serial.println(getPenalty());
 #endif
                         // Guessed wrong, try again
-                        status = 2;
+                        status = 1;
                     }
                 }
             }
