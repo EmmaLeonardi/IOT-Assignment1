@@ -1,5 +1,9 @@
 #include "Status.h"
 #include "Arduino.h"
+#include "Constants.h"
+
+// This variable is used for timing, for turning leds on for a given time
+unsigned long start;
 
 /*Turns off all the leds in the led array, and sets the status accordingly*/
 void turnAllOff(int *ledArray, bool *status, int SIZE)
@@ -33,7 +37,12 @@ void setStatusAsGiven(bool *pattern, bool *status, int SIZE)
 /*Turns on the led to the pin given for the time set in seconds*/
 void turnLedOnFor(int pinLed, int time)
 {
+    unsigned long start = millis();
     digitalWrite(pinLed, HIGH);
-    delay(time);
+    unsigned long now = millis();
+    while (now - start < time * MSECTOSEC)
+    {
+        now=millis();
+    }
     digitalWrite(pinLed, LOW);
 }
