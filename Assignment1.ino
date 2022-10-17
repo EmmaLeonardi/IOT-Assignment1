@@ -166,7 +166,7 @@ void loop()
             {
                 hasPrinted = true;
                 // Generate pattern
-                generatePattern(pattern, N);
+                generatePatternNoVoid(pattern, N);
 #ifdef DEBUG
                 Serial.println("D: Generating a led pattern");
 #endif
@@ -208,7 +208,7 @@ void loop()
             // Wait
             if (getPatternPressed() != 0)
             {
-                hasPrinted=false;
+                hasPrinted = false;
                 // A button was pressed->penality!!
                 turnAllOff(LPins, statusL, N);
                 // Remove all button interrupts
@@ -404,22 +404,22 @@ void loop()
                 score = 0;
                 // Turn off all game leds
                 turnAllOff(LPins, statusL, N);
-                //Reset all functions, it's game over
-                resetEndTime();
-                resetPatternPressed();
-                resetPenalty();
 #ifdef DEBUG
                 Serial.print("D: Number of penalties ");
                 Serial.println(getPenalty());
 #endif
+                // Reset all functions, it's game over
+                resetEndTime();
+                resetPatternPressed();
+                resetPenalty();
                 previousTime = millis();
             }
 
             unsigned long now = millis();
             if (now - previousTime >= GAMEOVERWAIT * MSECTOSEC)
             {
-                //New game
-                status=0;
+                // New game
+                status = 0;
                 previousTime = now;
             }
         }
