@@ -7,8 +7,15 @@ void generatePattern(bool *a, int SIZE)
 {
     for (int i = 0; i < SIZE; i++)
     {
-        bool b = rand() % 2;
-        a[i] = b;
+        int b = rand() % 2;
+        if (b == 0)
+        {
+            a[i] = false;
+        }
+        else
+        {
+            a[i] = true;
+        }
     }
 }
 
@@ -42,10 +49,12 @@ bool comparePattern(bool *a, bool *b, int SIZE)
     int i = 0;
     do
     {
+
         if (a[i] != b[i])
         {
             equals = false;
         }
         i++;
-    } while (equals == true || i < SIZE);
+    } while (equals == true && i < SIZE);
+    return equals;
 }
