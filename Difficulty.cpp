@@ -3,7 +3,7 @@
 #include "Constants.h"
 
 // Defines the initial time at the easiest difficulty
-#define EasyStartTime 15
+#define EasyStartTime 12
 
 // Defines the percentage of time reduction for each level that is harder than the easiest one
 #define HarderStartTimePercentage 0.85
@@ -12,7 +12,7 @@
 #define NextLevelSpeedup 0.85
 
 // Defines the memorize time at the easiest difficulty
-#define EasyMemorizeTime 10
+#define EasyMemorizeTime 8
 
 // Defines the percentage of time reduction for each level that is harder than the easiest one
 #define HarderMemorizeTimePercentage 0.95

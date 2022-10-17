@@ -1,19 +1,19 @@
 #ifndef DIFFICULTY_H
 #define DIFFICULTY_H
 
-// The minimum time to wait for the pattern to appear
-#define RANDOMWAITMIN 2
+// The minimum time in seconds to wait for the pattern to appear
+#define RANDOMWAITMIN 1
 
-// The maximum time to wait for the pattern to appear
-#define RANDOMWAITMAX 5
+// The maximum time in seconds to wait for the pattern to appear
+#define RANDOMWAITMAX 3
 
 // The maximum number of penalty before game over
 #define PENALTYMAX 3
 
-// The time to wait after a game over before a new game can be started
+// The time to wait in seconds after a game over before a new game can be started
 #define GAMEOVERWAIT 10
 
-// The time to turn on the penalty led after a penalty
+// The time in seconds to turn on the penalty led after a penalty
 #define PENALTYLEDON 1
 
 /*Returns the start time for the difficulty level selected.
