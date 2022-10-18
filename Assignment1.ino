@@ -77,6 +77,7 @@ void loop()
             if (hasPrinted == false)
             {
                 Serial.println("Welcome to the Catch the Led Pattern Game. Press Key T1 to Start.");
+                Serial.flush();
                 hasPrinted = true;
                 // Reset the game
                 resetGame();
@@ -106,8 +107,10 @@ void loop()
             {
                 // The difficulty has changed
                 lv = tmp;
+#ifdef DEBUG
                 Serial.print("D: Difficulty set to: ");
                 Serial.println(lv);
+#endif
                 timeShow = getStartTime(lv);
                 timeGuess = getMemorizeTime(lv);
             }
@@ -125,6 +128,7 @@ void loop()
             {
 #ifdef DEBUG
                 Serial.println("D: Timer event has run out, system entering deep sleep mode");
+                Serial.flush();
 #endif
                 // Removed interrupt handler
                 disableInterrupt(BPins[0]);
@@ -141,6 +145,7 @@ void loop()
                 hasPrinted = false;
 #ifdef DEBUG
                 Serial.println("D: System has exited deep sleep mode");
+                Serial.flush();
 #endif
             }
             else if (getGameStatus() == 1)
@@ -247,7 +252,7 @@ void loop()
             }
             else
             {
-                //The button wasn't pressed, check for timer interrupt
+                // The button wasn't pressed, check for timer interrupt
                 unsigned long now = millis();
                 if (now - previousTime >= timeShow * MSECTOSEC)
                 {
@@ -405,7 +410,7 @@ void loop()
                 // Game over
                 Serial.print("Game Over. Final Score: ");
                 Serial.println(score);
-                #ifdef DEBUG
+#ifdef DEBUG
                 Serial.print("D: Number of penalties ");
                 Serial.println(getPenalty());
 #endif
