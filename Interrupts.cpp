@@ -3,7 +3,7 @@
 #include "Arduino.h"
 
 // If interrupts come faster than this amount of ms, assume it's a bounce and ignore
-#define DEBOUNCE 150
+#define DEBOUNCE 180
 
 /*Interrupt handler, to play the game*/
 void interruptLed()
