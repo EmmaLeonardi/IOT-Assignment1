@@ -74,7 +74,8 @@ void loop()
     {
     case (0):;
         {
-            if (millis()- getLastInterruptTime() > DEBOUNCED)
+            unsigned long now=millis();
+            if (now- getLastInterruptTime() > DEBOUNCED)
             {
                 // This prevents the start of the game caused by the bouncing of the button after the wakeup
                 if (hasPrinted == false)
@@ -177,6 +178,10 @@ void loop()
 #ifdef DEBUG
                 // Debounce caugth
                 Serial.println("D: Caugth bounce");
+                Serial.print("D: Millis value ");
+                Serial.println(now);
+                Serial.print("D: Interrupt at ");
+                Serial.println(getLastInterruptTime());
 #endif
             }
         }
@@ -446,6 +451,7 @@ void loop()
                 // New game
                 status = 0;
                 previousTime = now;
+                hasPrinted=false;
             }
         }
         break;
