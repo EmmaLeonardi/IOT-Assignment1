@@ -1,4 +1,6 @@
 #define LIBCALL_ENABLEINTERRUPT
+//Used to query the Enable Interrupt library to ask what pin called the interrupt
+#define EI_ARDUINO_INTERRUPTED_PIN
 #include <avr/sleep.h>
 #include <EnableInterrupt.h>
 #include "PowerSave.h"
