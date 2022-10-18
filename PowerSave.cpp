@@ -3,8 +3,9 @@
 #include <EnableInterrupt.h>
 #include "PowerSave.h"
 #include "Pins.h"
-#define DEBOUNCED 200
 
+
+static unsigned long lastInterrupt=0;
 
 /*Calling this function enables sleep mode,
 attaches interrupts to all the button pins to wakeup the Arduino*/
@@ -23,15 +24,15 @@ void sleep()
 unconnects all interrupts to all the button pins*/
 void wakeup()
 {
-    static unsigned long last_interrupt_time = 0;
-    unsigned long interrupt_time = millis();
-    if (interrupt_time - last_interrupt_time > DEBOUNCED)
+    lastInterrupt = millis();
+    sleep_disable();
+    for (int i = 0; i < N; i++)
     {
-        last_interrupt_time = interrupt_time;
-        sleep_disable();
-        for (int i = 0; i < N; i++)
-        {
-            disableInterrupt(BPins[i]);
-        }
+        disableInterrupt(BPins[i]);
     }
+}
+
+/*Returns the time of the last interrupt in millis*/
+int getLastInterruptTime(){
+    return lastInterrupt;
 }
