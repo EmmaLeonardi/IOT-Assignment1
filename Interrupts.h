@@ -14,7 +14,8 @@ volatile static int patternPress;
 Reads what button called the interrupt and turns on the relative led*/
 void interruptLed();
 
-/*Finds the index of the pin given*/
+/*Finds the index of the pin given.
+Returns N, the size of the vector of pins if the interrupt wasn't called by a pin in the button vector*/
 unsigned int getIndex(unsigned int j);
 
 /*Interrupt handler, to start the game*/
@@ -42,18 +43,6 @@ int getEndTime();
 
 /*Function to reset the endTime*/
 void resetEndTime();
-
-/*Button 0 handler, turns on and off the led 0*/
-void buttonPressed0();
-
-/*Button 1 handler, turns on and off the led 1*/
-void buttonPressed1();
-
-/*Button 2 handler, turns on and off the led 2*/
-void buttonPressed2();
-
-/*Button 3 handler, turns on and off the led 3*/
-void buttonPressed3();
 
 /*Interrupt handler, called when the pattern is shown*/
 void patternPressed();

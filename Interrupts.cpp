@@ -1,4 +1,4 @@
-//This constant is defined to avoid compilation errors from multiple inclusions of the Enable Interrupt library
+// This constant is defined to avoid compilation errors from multiple inclusions of the Enable Interrupt library
 #define LIBCALL_ENABLEINTERRUPT
 #include "Interrupts.h"
 #include "Pins.h"
@@ -37,12 +37,13 @@ void interruptLed()
     }
 }
 
-/*Finds the index of the pin given*/
+/*Finds the index of the pin given.
+Returns N, the size of the vector of pins if the interrupt wasn't called by a pin in the button vector*/
 unsigned int getIndex(unsigned int j)
 {
     for (unsigned int i = 0; i < N; i++)
     {
-        if (BPins[i] == (int) j)
+        if (BPins[i] == (int)j)
         {
             return i;
         }
@@ -124,94 +125,6 @@ void resetEndTime()
     if (interrupt_time - last_interrupt_time > DEBOUNCE)
     {
         endTime = 0;
-        last_interrupt_time = interrupt_time;
-    }
-}
-
-/*Button 0 handler, turns on and off the led 0*/
-void buttonPressed0()
-{
-    static unsigned long last_interrupt_time = 0;
-    unsigned long interrupt_time = millis();
-    if (interrupt_time - last_interrupt_time > DEBOUNCE)
-    {
-        int i = 0;
-        if (statusL[i] == false)
-        {
-            digitalWrite(LPins[i], HIGH);
-            statusL[i] = true;
-        }
-        else
-        {
-            digitalWrite(LPins[i], LOW);
-            statusL[i] = false;
-        }
-        last_interrupt_time = interrupt_time;
-    }
-}
-
-/*Button 1 handler, turns on and off the led 1*/
-void buttonPressed1()
-{
-    static unsigned long last_interrupt_time = 0;
-    unsigned long interrupt_time = millis();
-    if (interrupt_time - last_interrupt_time > DEBOUNCE)
-    {
-        int i = 1;
-        if (statusL[i] == false)
-        {
-            digitalWrite(LPins[i], HIGH);
-            statusL[i] = true;
-        }
-        else
-        {
-            digitalWrite(LPins[i], LOW);
-            statusL[i] = false;
-        }
-        last_interrupt_time = interrupt_time;
-    }
-}
-
-/*Button 2 handler, turns on and off the led 2*/
-void buttonPressed2()
-{
-    static unsigned long last_interrupt_time = 0;
-    unsigned long interrupt_time = millis();
-    if (interrupt_time - last_interrupt_time > DEBOUNCE)
-    {
-        int i = 2;
-        if (statusL[i] == false)
-        {
-            digitalWrite(LPins[i], HIGH);
-            statusL[i] = true;
-        }
-        else
-        {
-            digitalWrite(LPins[i], LOW);
-            statusL[i] = false;
-        }
-        last_interrupt_time = interrupt_time;
-    }
-}
-
-/*Button 3 handler, turns on and off the led 3*/
-void buttonPressed3()
-{
-    static unsigned long last_interrupt_time = 0;
-    unsigned long interrupt_time = millis();
-    if (interrupt_time - last_interrupt_time > DEBOUNCE)
-    {
-        int i = 3;
-        if (statusL[i] == false)
-        {
-            digitalWrite(LPins[i], HIGH);
-            statusL[i] = true;
-        }
-        else
-        {
-            digitalWrite(LPins[i], LOW);
-            statusL[i] = false;
-        }
         last_interrupt_time = interrupt_time;
     }
 }
