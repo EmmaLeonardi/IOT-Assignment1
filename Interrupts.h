@@ -10,8 +10,12 @@ volatile static int endTime;
 // This variable is set to 1 when the function pattern press is called, otherwise 0
 volatile static int patternPress;
 
-/*Interrupt handler, to play the game*/
+/*Interrupt handler, to play the game
+Reads what button called the interrupt and turns on the relative led*/
 void interruptLed();
+
+/*Finds the index of the pin given*/
+unsigned int getIndex(unsigned int j);
 
 /*Interrupt handler, to start the game*/
 void startGame();
