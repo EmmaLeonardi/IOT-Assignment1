@@ -21,8 +21,9 @@ void startGame()
     if (interrupt_time - last_interrupt_time > DEBOUNCE)
     {
         gameStarts = 1;
+        last_interrupt_time = interrupt_time;
     }
-    last_interrupt_time = interrupt_time;
+    
 }
 
 /*Function to reset the game*/
@@ -33,8 +34,9 @@ void resetGame()
     if (interrupt_time - last_interrupt_time > DEBOUNCE)
     {
         gameStarts = 0;
+        last_interrupt_time = interrupt_time;
     }
-    last_interrupt_time = interrupt_time;
+    
 }
 
 /*Retuns the status of gameStarts
@@ -54,8 +56,9 @@ void deepSleepEvent()
     if (interrupt_time - last_interrupt_time > DEBOUNCE)
     {
         gameStarts = -1;
+        last_interrupt_time = interrupt_time;
     }
-    last_interrupt_time = interrupt_time;
+    
 }
 
 /*Interrupt handler, called when game over*/
@@ -66,8 +69,9 @@ void timeHasEnded()
     if (interrupt_time - last_interrupt_time > DEBOUNCE)
     {
         endTime = 1;
+        last_interrupt_time = interrupt_time;
     }
-    last_interrupt_time = interrupt_time;
+    
 }
 
 /*Returns the status of endTime
@@ -86,8 +90,9 @@ void resetEndTime()
     if (interrupt_time - last_interrupt_time > DEBOUNCE)
     {
         endTime = 0;
+        last_interrupt_time = interrupt_time;
     }
-    last_interrupt_time = interrupt_time;
+    
 }
 
 /*Button 0 handler, turns on and off the led 0*/
@@ -108,8 +113,9 @@ void buttonPressed0()
             digitalWrite(LPins[i], LOW);
             statusL[i] = false;
         }
+        last_interrupt_time = interrupt_time;
     }
-    last_interrupt_time = interrupt_time;
+    
 }
 
 /*Button 1 handler, turns on and off the led 1*/
@@ -130,8 +136,9 @@ void buttonPressed1()
             digitalWrite(LPins[i], LOW);
             statusL[i] = false;
         }
+        last_interrupt_time = interrupt_time;
     }
-    last_interrupt_time = interrupt_time;
+    
 }
 
 /*Button 2 handler, turns on and off the led 2*/
@@ -152,8 +159,9 @@ void buttonPressed2()
             digitalWrite(LPins[i], LOW);
             statusL[i] = false;
         }
+        last_interrupt_time = interrupt_time;
     }
-    last_interrupt_time = interrupt_time;
+    
 }
 
 /*Button 3 handler, turns on and off the led 3*/
@@ -174,8 +182,9 @@ void buttonPressed3()
             digitalWrite(LPins[i], LOW);
             statusL[i] = false;
         }
+        last_interrupt_time = interrupt_time;
     }
-    last_interrupt_time = interrupt_time;
+    
 }
 
 /*Interrupt handler, called when the pattern is shown*/
@@ -186,8 +195,9 @@ void patternPressed()
     if (interrupt_time - last_interrupt_time > DEBOUNCE)
     {
         patternPress = 1;
+        last_interrupt_time = interrupt_time;
     }
-    last_interrupt_time = interrupt_time;
+    
 }
 
 /*Function to restart patternPressed*/
@@ -198,8 +208,9 @@ void resetPatternPressed()
     if (interrupt_time - last_interrupt_time > DEBOUNCE)
     {
         patternPress = 0;
+        last_interrupt_time = interrupt_time;
     }
-    last_interrupt_time = interrupt_time;
+    
 }
 
 /*Returns the value of patterPressed,
