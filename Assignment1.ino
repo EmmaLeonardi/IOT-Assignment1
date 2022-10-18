@@ -74,8 +74,8 @@ void loop()
     {
     case (0):;
         {
-            unsigned long now=millis();
-            if (now- getLastInterruptTime() > DEBOUNCED)
+            unsigned long now = millis();
+            if (now - getLastInterruptTime() > DEBOUNCED)
             {
                 // This prevents the start of the game caused by the bouncing of the button after the wakeup
                 if (hasPrinted == false)
@@ -451,7 +451,7 @@ void loop()
                 // New game
                 status = 0;
                 previousTime = now;
-                hasPrinted=false;
+                hasPrinted = false;
             }
         }
         break;
