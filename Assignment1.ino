@@ -38,10 +38,10 @@ int score = 0;
 bool pattern[N];
 
 // The time for which the pattern is shown
-int timeShow = 0;
+double timeShow = 0;
 
 // The time given to guess the pattern
-int timeGuess = 0;
+double timeGuess = 0;
 
 // This variable is used to store the time
 unsigned long previousTime = 0;
