@@ -49,7 +49,7 @@ double timeGuess = 0;
 unsigned long previousTime = 0;
 
 // If the debug symbol has been defined, extra prints appear on the console as testing checks
-#define DEBUG
+//#define DEBUG
 
 void setup()
 {
