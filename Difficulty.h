@@ -18,17 +18,19 @@
 
 /*Returns the start time for the difficulty level selected.
 The level has to be between 1 (easiest) and LV (hardest, defined in constants), otherwise returns -1*/
-int getStartTime(int lv);
+double getStartTime(int lv);
 
-/*Returns the time for the next level, given the previous one */
-int nextLevelTime(int previousTime);
+/*Returns the time for the next level, given the previous one
+It will never be less then a second*/
+double nextLevelTime(double previousTime);
 
 /*Returns the memorize time for the difficulty level selected.
 The level has to be between 1 (easiest) and LV (hardest, defined in constants), otherwise returns -1*/
-int getMemorizeTime(int lv);
+double getMemorizeTime(int lv);
 
-/*Returns the time for the next memorize, given the previous one */
-int nextMemorizeTime(int previousTime);
+/*Returns the time for the next memorize, given the previous one 
+It will never be less then a second*/
+double nextMemorizeTime(double previousTime);
 
 /*Returns the time for a random wait between MIN and MAX */
 int randomWaitTime();

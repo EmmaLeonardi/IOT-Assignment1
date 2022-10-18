@@ -3,7 +3,7 @@
 #include "Constants.h"
 
 // Defines the initial time at the easiest difficulty
-#define EasyStartTime 12
+#define EasyStartTime 10
 
 // Defines the percentage of time reduction for each level that is harder than the easiest one
 #define HarderStartTimePercentage 0.85
@@ -25,7 +25,7 @@ static int penaltyN=0;
 
 /*Returns the start time for the difficulty level selected.
 The level has to be between 1 (easiest) and LV (hardest, defined in constants), otherwise returns -1*/
-int getStartTime(int lv)
+double getStartTime(int lv)
 {
     if (lv >= 1 && lv <= LV)
     {
@@ -48,15 +48,16 @@ int getStartTime(int lv)
     return -1;
 }
 
-/*Returns the time for the next level, given the previous one */
-int nextLevelTime(int previousTime)
+/*Returns the time for the next level, given the previous one 
+It will never be less then a second*/
+double nextLevelTime(double previousTime)
 {
-    return previousTime * NextLevelSpeedup;
+    return (previousTime * NextLevelSpeedup)<1?1:previousTime*NextLevelSpeedup;
 }
 
 /*Returns the memorize time for the difficulty level selected.
 The level has to be between 1 (easiest) and LV (hardest, defined in constants), otherwise returns -1*/
-int getMemorizeTime(int lv)
+double getMemorizeTime(double lv)
 {
     if (lv >= 1 && lv <= LV)
     {
@@ -79,10 +80,11 @@ int getMemorizeTime(int lv)
     return -1;
 }
 
-/*Returns the time for the next memorize, given the previous one */
-int nextMemorizeTime(int previousTime)
+/*Returns the time for the next memorize, given the previous one 
+It will never be less then a second*/
+double nextMemorizeTime(double previousTime)
 {
-    return previousTime * NextMemorizeSpeedup;
+    return (previousTime * NextMemorizeSpeedup)<1?1:previousTime*NextMemorizeSpeedup;
 }
 
 /*Returns the time for a random wait between MIN and MAX */
