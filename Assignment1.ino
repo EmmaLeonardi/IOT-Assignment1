@@ -14,7 +14,7 @@
 1->generating the led pattern
 2->showing the led pattern
 3->the player is guessing the pattern
-4->guessed rigth, increase score and decrease time
+4->guessed right, increase score and decrease time
 5->game over
 */
 int status;
@@ -25,7 +25,7 @@ int lv = 0;
 // Used to print or do some instructions once
 bool hasPrinted = false;
 
-// The random time to wait between a new pattern is shown
+// The random time to wait before a new pattern is shown
 int wait = 0;
 
 // The brigthness of the fading led
@@ -86,6 +86,9 @@ void loop()
                 score = 0;
                 // Turn off all game leds
                 turnAllOff(LPins, statusL, N);
+                // Turn off red led
+                brightness = FADE_LIMIT_MIN;
+                setBrightness(brightness, LS);
 #ifdef DEBUG
                 Serial.println("D: Connecting the button interrupt and timer");
 #endif
@@ -117,6 +120,7 @@ void loop()
                 deepSleepEvent();
                 previousTime = now;
             }
+
             if (getGameStatus() == -1)
             {
 #ifdef DEBUG
@@ -147,6 +151,7 @@ void loop()
                 // Removed interrupt handler
                 disableInterrupt(BPins[0]);
                 Serial.println("Go!");
+                // Turning off LS
                 brightness = FADE_LIMIT_MIN;
                 setBrightness(brightness, LS);
                 // Reset score, next part of game
@@ -179,9 +184,9 @@ void loop()
             {
                 status = 2;
                 previousTime = now;
+                hasPrinted = false;
 #ifdef DEBUG
                 Serial.println("D: Pattern created");
-                hasPrinted = false;
 #endif
             }
         }
@@ -240,24 +245,28 @@ void loop()
                     status = 1;
                 }
             }
-            unsigned long now = millis();
-            if (now - previousTime >= timeShow * MSECTOSEC)
+            else
             {
-                // Turn off all leds
-                turnAllOff(LPins, statusL, N);
-                // Remove all button interrupts
-                for (int i = 0; i < N; i++)
+                //The button wasn't pressed, check for timer interrupt
+                unsigned long now = millis();
+                if (now - previousTime >= timeShow * MSECTOSEC)
                 {
-                    disableInterrupt(BPins[i]);
-                }
-                status = 3;
-                previousTime = now;
-                hasPrinted = false;
+                    // Turn off all leds
+                    turnAllOff(LPins, statusL, N);
+                    // Remove all button interrupts
+                    for (int i = 0; i < N; i++)
+                    {
+                        disableInterrupt(BPins[i]);
+                    }
+                    status = 3;
+                    previousTime = now;
+                    hasPrinted = false;
 #ifdef DEBUG
-                Serial.println("D: Going to next fase");
-                Serial.print("D: Difficulty: ");
-                Serial.println(lv);
+                    Serial.println("D: Going to next fase");
+                    Serial.print("D: Difficulty: ");
+                    Serial.println(lv);
 #endif
+                }
             }
         }
         break;
@@ -291,7 +300,6 @@ void loop()
             {
                 timeHasEnded();
                 previousTime = now;
-                hasPrinted = false;
             }
 
             if (getEndTime() == 1)
@@ -330,9 +338,9 @@ void loop()
                 if (guess)
                 {
 #ifdef DEBUG
-                    Serial.println("D: Guessed rigth");
+                    Serial.println("D: Guessed right");
 #endif
-                    // Guessed rigth!
+                    // Guessed right!
                     status = 4;
                 }
                 else
