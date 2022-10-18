@@ -1,3 +1,4 @@
+//This constant is defined to avoid compilation errors from multiple inclusions of the Enable Interrupt library 
 #define LIBCALL_ENABLEINTERRUPT
 //Used to query the Enable Interrupt library to ask what pin called the interrupt
 #define EI_ARDUINO_INTERRUPTED_PIN

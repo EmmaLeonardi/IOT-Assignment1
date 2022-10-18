@@ -1,3 +1,4 @@
+//This constant is defined to avoid compilation errors from multiple inclusions of the Enable Interrupt library
 #define LIBCALL_ENABLEINTERRUPT
 #include "Interrupts.h"
 #include "Pins.h"
