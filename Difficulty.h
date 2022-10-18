@@ -26,7 +26,7 @@ double nextLevelTime(double previousTime);
 
 /*Returns the memorize time for the difficulty level selected.
 The level has to be between 1 (easiest) and LV (hardest, defined in constants), otherwise returns -1*/
-double getMemorizeTime(int lv);
+double getMemorizeTime(double lv);
 
 /*Returns the time for the next memorize, given the previous one 
 It will never be less then a second*/
