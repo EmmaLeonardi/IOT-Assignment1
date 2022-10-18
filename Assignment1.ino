@@ -74,99 +74,110 @@ void loop()
     {
     case (0):;
         {
-            if (hasPrinted == false)
+            if (millis()- getLastInterruptTime() > DEBOUNCED)
             {
-                Serial.println("Welcome to the Catch the Led Pattern Game. Press Key T1 to Start.");
-                Serial.flush();
-                hasPrinted = true;
-                // Reset the game
-                resetGame();
-                // Reset penalty
-                resetPenalty();
-                // Reset score
-                score = 0;
-                // Turn off all game leds
-                turnAllOff(LPins, statusL, N);
-                // Turn off red led
-                brightness = FADE_LIMIT_MIN;
+                // This prevents the start of the game caused by the bouncing of the button after the wakeup
+                if (hasPrinted == false)
+                {
+                    Serial.println("Welcome to the Catch the Led Pattern Game. Press Key T1 to Start.");
+                    Serial.flush();
+                    hasPrinted = true;
+                    // Reset the game
+                    resetGame();
+                    // Reset penalty
+                    resetPenalty();
+                    // Reset score
+                    score = 0;
+                    // Turn off all game leds
+                    turnAllOff(LPins, statusL, N);
+                    // Turn off red led
+                    brightness = FADE_LIMIT_MIN;
+                    setBrightness(brightness, LS);
+#ifdef DEBUG
+                    Serial.println("D: Connecting the button interrupt and timer");
+#endif
+                    // Turn on interrupts for B1
+                    enableInterrupt(BPins[0], startGame, CHANGE);
+                    previousTime = millis();
+#ifdef DEBUG
+                    Serial.print("D: Inizialized previous time, value ");
+                    Serial.println(previousTime);
+#endif
+                }
+                int pValue = analogRead(Pot);
+                int tmp = map(pValue, POTMIN, POTMAX, LVMIN, LVMAX);
+                if (tmp != lv)
+                {
+                    // The difficulty has changed
+                    lv = tmp;
+#ifdef DEBUG
+                    Serial.print("D: Difficulty set to: ");
+                    Serial.println(lv);
+#endif
+                    timeShow = getStartTime(lv);
+                    timeGuess = getMemorizeTime(lv);
+                }
+                // Ls pulses
+                brightness = nextStep(brightness);
                 setBrightness(brightness, LS);
-#ifdef DEBUG
-                Serial.println("D: Connecting the button interrupt and timer");
-#endif
-                // Turn on interrupts for B1
-                enableInterrupt(BPins[0], startGame, CHANGE);
-                previousTime = millis();
-#ifdef DEBUG
-                Serial.print("D: Inizialized previous time, value ");
-                Serial.println(previousTime);
-#endif
-            }
-            int pValue = analogRead(Pot);
-            int tmp = map(pValue, POTMIN, POTMAX, LVMIN, LVMAX);
-            if (tmp != lv)
-            {
-                // The difficulty has changed
-                lv = tmp;
-#ifdef DEBUG
-                Serial.print("D: Difficulty set to: ");
-                Serial.println(lv);
-#endif
-                timeShow = getStartTime(lv);
-                timeGuess = getMemorizeTime(lv);
-            }
-            // Ls pulses
-            brightness = nextStep(brightness);
-            setBrightness(brightness, LS);
-            unsigned long now = millis();
-            if (now - previousTime >= WAITFORSTART * MSECTOSEC)
-            {
-                deepSleepEvent();
-                previousTime = now;
-            }
+                unsigned long now = millis();
+                if (now - previousTime >= WAITFORSTART * MSECTOSEC)
+                {
+                    deepSleepEvent();
+                    previousTime = now;
+                }
 
-            if (getGameStatus() == -1)
-            {
+                if (getGameStatus() == -1)
+                {
 #ifdef DEBUG
-                Serial.println("D: Timer event has run out, system entering deep sleep mode");
-                Serial.flush();
+                    Serial.println("D: Timer event has run out, system entering deep sleep mode");
+                    Serial.flush();
 #endif
-                // Removed interrupt handler
-                disableInterrupt(BPins[0]);
-                // Reset game status
-                resetGame();
-                // Turning off LS
-                brightness = FADE_LIMIT_MIN;
-                setBrightness(brightness, LS);
-                // Deep sleep triggered, all buttons trigger interrupts to wakeup arduino
-                sleep();
-                // Reset status
-                status = 0;
-                // Reset has printed
-                hasPrinted = false;
+                    // Removed interrupt handler
+                    disableInterrupt(BPins[0]);
+                    // Reset game status
+                    resetGame();
+                    // Turning off LS
+                    brightness = FADE_LIMIT_MIN;
+                    setBrightness(brightness, LS);
+                    // Deep sleep triggered, all buttons trigger interrupts to wakeup arduino
+                    sleep();
+                    // Reset status
+                    status = 0;
+                    // Reset has printed
+                    hasPrinted = false;
 #ifdef DEBUG
-                Serial.println("D: System has exited deep sleep mode");
-                Serial.flush();
+                    Serial.println("D: System has exited deep sleep mode");
+                    Serial.flush();
 #endif
-            }
-            else if (getGameStatus() == 1)
-            {
+                }
+                else if (getGameStatus() == 1)
+                {
 #ifdef DEBUG
-                Serial.println("D: Interrupt on button activated, game starting");
+                    Serial.println("D: Interrupt on button activated, game starting");
 #endif
-                // Removed interrupt handler
-                disableInterrupt(BPins[0]);
-                Serial.println("Go!");
-                // Turning off LS
-                brightness = FADE_LIMIT_MIN;
-                setBrightness(brightness, LS);
-                // Reset score, next part of game
-                score = 0;
-                status = 1;
-                hasPrinted = false;
+                    // Removed interrupt handler
+                    disableInterrupt(BPins[0]);
+                    Serial.println("Go!");
+                    // Turning off LS
+                    brightness = FADE_LIMIT_MIN;
+                    setBrightness(brightness, LS);
+                    // Reset score, next part of game
+                    score = 0;
+                    status = 1;
+                    hasPrinted = false;
+                }
+                else
+                {
+                    // Still waiting for button press or timer event
+                }
             }
             else
             {
-                // Still waiting for button press or timer event
+#ifdef DEBUG
+                // Debounce caugth
+                Serial.println("D: Caugth bounce");
+#endif
             }
         }
         break;
