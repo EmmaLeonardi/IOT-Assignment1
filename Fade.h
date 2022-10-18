@@ -2,7 +2,7 @@
 #define FADE_H
 
 // The step amount for the fading of a led
-#define FADE_AMOUNT 10;
+#define FADE_AMOUNT 5;
 
 // The minumum brightness a led can take
 #define FADE_LIMIT_MIN 0

@@ -7,7 +7,7 @@ static int fadeAmount = FADE_AMOUNT;
 int nextStep(int current)
 {
     current += fadeAmount;
-    if (current == FADE_LIMIT_MIN || current == FADE_LIMIT_MAX)
+    if (current <= FADE_LIMIT_MIN || current >= FADE_LIMIT_MAX)
     {
         fadeAmount = -fadeAmount;
     }
