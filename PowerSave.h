@@ -12,6 +12,6 @@ unconnects all interrupts to all the button pins*/
 void wakeup();
 
 /*Returns the time of the last interrupt in millis*/
-int getLastInterruptTime();
+unsigned long getLastInterruptTime();
 
 #endif
