@@ -276,6 +276,7 @@ void loop()
             {
                 // I have t3 time to guess
                 hasPrinted = true;
+                resetEndTime();
 #ifdef DEBUG
                 Serial.println("D: Connecting to all buttons to interrupts, to change the corrisponding led status");
                 Serial.print("D: Memory time: ");
@@ -404,6 +405,10 @@ void loop()
                 // Game over
                 Serial.print("Game Over. Final Score: ");
                 Serial.println(score);
+                #ifdef DEBUG
+                Serial.print("D: Number of penalties ");
+                Serial.println(getPenalty());
+#endif
                 // Reset the game
                 resetGame();
                 // Reset penalty
@@ -412,14 +417,10 @@ void loop()
                 score = 0;
                 // Turn off all game leds
                 turnAllOff(LPins, statusL, N);
-#ifdef DEBUG
-                Serial.print("D: Number of penalties ");
-                Serial.println(getPenalty());
-#endif
+
                 // Reset all functions, it's game over
                 resetEndTime();
                 resetPatternPressed();
-                resetPenalty();
                 previousTime = millis();
             }
 
