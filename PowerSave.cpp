@@ -1,3 +1,4 @@
+/*This code was written by Emma Leonardi (emma.leonardi2@studio.unibo.it)*/
 //This constant is defined to avoid compilation errors from multiple inclusions of the Enable Interrupt library 
 #define LIBCALL_ENABLEINTERRUPT
 //Used to query the Enable Interrupt library to ask what pin called the interrupt

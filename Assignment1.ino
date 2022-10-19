@@ -1,3 +1,4 @@
+/*This code was written by Emma Leonardi (emma.leonardi2@studio.unibo.it)*/
 #include "Pins.h"
 #include "Constants.h"
 #include "Patterns.h"

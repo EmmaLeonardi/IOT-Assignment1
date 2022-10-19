@@ -1,3 +1,4 @@
+/*This code was written by Emma Leonardi (emma.leonardi2@studio.unibo.it)*/
 #include "Status.h"
 #include "Arduino.h"
 #include "Constants.h"

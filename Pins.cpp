@@ -1,3 +1,4 @@
+/*This code was written by Emma Leonardi (emma.leonardi2@studio.unibo.it)*/
 #include "Pins.h"
 /*Array of the button pins*/
 int BPins[N] = {7, 6, 5, 4};
