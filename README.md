@@ -14,7 +14,7 @@ The game is made to run on an Arduino Uno board.
 - Resistors
 
 ## Circuit
-![Circuit schema](https://github.com/EmmaLeonardi/IOT-Assignment1/blob/main/Assignement1_image.png?raw=true)
+![Circuit schema](https://github.com/EmmaLeonardi/IOT-Assignment1/blob/main/Assignement1_Image.png?raw=true)
 
 ## Pin connections
 ### Digital pins
