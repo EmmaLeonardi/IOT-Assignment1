@@ -7,7 +7,7 @@
 #include "Interrupts.h"
 #include "Status.h"
 #include "PowerSave.h"
-//Used to query the Enable Interrupt library to ask what pin called the interrupt
+// Used to query the Enable Interrupt library to ask what pin called the interrupt
 #define EI_ARDUINO_INTERRUPTED_PIN
 #include <EnableInterrupt.h>
 
@@ -308,10 +308,10 @@ void loop()
                 Serial.println(timeGuess);
 #endif
                 // Connect all buttons with the interrupts to all the leds, keeping status updated
-                enableInterrupt(BPins[0], interruptLed, CHANGE);
-                enableInterrupt(BPins[1], interruptLed, CHANGE);
-                enableInterrupt(BPins[2], interruptLed, CHANGE);
-                enableInterrupt(BPins[3], interruptLed, CHANGE);
+                for (int i = 0; i < N; i++)
+                {
+                    enableInterrupt(BPins[i], interruptLed, CHANGE);
+                }
 
                 previousTime = millis();
 #ifdef DEBUG
