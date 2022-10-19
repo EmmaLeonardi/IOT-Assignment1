@@ -14,8 +14,15 @@ int nextStep(int current)
     return current;
 }
 
-/*Sets the brigthness to the given amount to the connected led on the pin, given that the led supports PWM*/
+/*Sets the brigthness to the given amount to the connected led on the pin, given that the led supports PWM
+Takes more than FADEDELAY (usually 5) milliseconds to execute to allow the fade to work*/
 void setBrightness(int b, int pin_led)
 {
     analogWrite(pin_led, b);
+    unsigned long before = millis();
+    unsigned long now;
+    do
+    {
+        now = millis();
+    } while (now - before < FADEDELAY);
 }
